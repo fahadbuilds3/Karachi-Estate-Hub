@@ -1,0 +1,62 @@
+@model KarachiEstateHub.ViewModels.SampleDataStatusViewModel
+@{
+    ViewBag.Title = "Sample Data";
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo"><div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div><div class="dash-sidebar-logo-text">Admin</div></div>
+        <div class="dash-nav-section">Admin</div>
+        <a class="dash-nav-item" href="@Url.Action("Index", "Admin")"><i class="ti ti-layout-dashboard"></i><span>Admin Dashboard</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Properties", "Admin")"><i class="ti ti-building"></i><span>Manage Properties</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Users", "Admin")"><i class="ti ti-users"></i><span>Manage Users</span></a>
+        <a class="dash-nav-item active" href="@Url.Action("SampleData", "Admin")"><i class="ti ti-database-plus"></i><span>Sample Data</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header">
+            <div>
+                <div class="dash-header-title">Sample Data Seeder</div>
+                <div class="dash-header-sub">Adds realistic testing properties for listings and AI Assistant searches.</div>
+            </div>
+            @using (Html.BeginForm("SeedSampleData", "Admin", FormMethod.Post, new { style = "display:inline" }))
+            {
+                @Html.AntiForgeryToken()
+                <button class="btn-teal" type="submit">Run Seeder</button>
+            }
+            @using (Html.BeginForm("SeedSampleProperties", "Admin", FormMethod.Post, new { style = "display:inline;margin-left:8px" }))
+            {
+                @Html.AntiForgeryToken()
+                <button class="btn-outline" type="submit">Seed 40 Sample AI Properties</button>
+            }
+        </div>
+
+        <div class="dash-table-card" style="padding:18px;margin-bottom:22px">
+            <div class="dash-table-title" style="margin-bottom:12px">Database Used By App</div>
+            <p style="margin:0;color:var(--muted);font-size:13px">Server: <strong style="color:var(--text)">@Model.DatabaseServer</strong></p>
+            <p style="margin:6px 0 0;color:var(--muted);font-size:13px">Database: <strong style="color:var(--text)">@Model.DatabaseName</strong></p>
+        </div>
+
+        <div class="kpi-grid" style="margin-bottom:22px">
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalSampleProperties</div><div class="kpi-label">Total Sample Properties</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.ActiveVisibleSampleProperties</div><div class="kpi-label">Visible on /Listings</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.PendingSampleProperties</div><div class="kpi-label">Pending Samples</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.DraftSampleProperties</div><div class="kpi-label">Draft Samples</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.RejectedSampleProperties</div><div class="kpi-label">Rejected Samples</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.MissingUserReferences</div><div class="kpi-label">Missing Users</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.MissingTypeReferences</div><div class="kpi-label">Missing Types</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.MissingLocationReferences</div><div class="kpi-label">Missing Locations</div></div>
+        </div>
+
+        <div class="dash-table-card" style="padding:18px">
+            <div class="dash-table-title" style="margin-bottom:10px">Visibility Check</div>
+            <p style="color:var(--muted);font-size:13px;margin-bottom:14px">
+                Public listings show only records where <strong>Status = Active</strong> and <strong>IsActive = true</strong>.
+                Admin properties show all statuses.
+            </p>
+            <a class="btn-teal" href="@Url.Action("Properties", "Admin", new { searchTerm = "Sample AI" })">View Sample AI in Admin</a>
+            <a class="btn-outline" href="@Url.RouteUrl("Listings")" style="margin-left:8px">Open Public Listings</a>
+        </div>
+    </main>
+</div>

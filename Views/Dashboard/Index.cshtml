@@ -1,0 +1,109 @@
+@model KarachiEstateHub.ViewModels.DashboardViewModel
+@{
+    ViewBag.Title = "Dashboard";
+    var userName = Session["UserName"] as string;
+    var myPropertiesUrl = Url.RouteUrl("MyProperties");
+    var createUrl = Url.RouteUrl("CreateListing");
+    var mySavedUrl = Url.RouteUrl("MySaved");
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo">
+            <div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div>
+            <div class="dash-sidebar-logo-text">KEH</div>
+        </div>
+        <div class="dash-nav-section">Main</div>
+        <a class="dash-nav-item active" href="@Url.Action("Index", "Dashboard")"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="dash-nav-item" href="@myPropertiesUrl"><i class="ti ti-building"></i><span>My Properties</span></a>
+        <a class="dash-nav-item" href="@createUrl"><i class="ti ti-plus"></i><span>Add Property</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-message-circle"></i><span>Inquiries</span></a>
+        <a class="dash-nav-item" href="@mySavedUrl"><i class="ti ti-heart"></i><span>Saved</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header">
+            <div>
+                <div class="dash-header-title">Welcome, @userName</div>
+                <div class="dash-header-sub">Property and inquiry overview.</div>
+            </div>
+            <a class="btn-teal" href="@createUrl"><i class="ti ti-plus"></i> Add Property</a>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:var(--teal-light)"><i class="ti ti-building" style="color:var(--teal)"></i></div></div><div class="kpi-val">@Model.TotalProperties</div><div class="kpi-label">Total Properties</div></div>
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:var(--teal-light)"><i class="ti ti-check" style="color:var(--teal)"></i></div></div><div class="kpi-val">@Model.ActiveListings</div><div class="kpi-label">Active Listings</div></div>
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:#fef3c7"><i class="ti ti-clock" style="color:#92400e"></i></div></div><div class="kpi-val">@Model.PendingListings</div><div class="kpi-label">Pending Listings</div></div>
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:#f3f4f6"><i class="ti ti-file" style="color:var(--muted)"></i></div></div><div class="kpi-val">@Model.DraftListings</div><div class="kpi-label">Draft Listings</div></div>
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:var(--navy-light)"><i class="ti ti-message-circle" style="color:var(--navy)"></i></div></div><div class="kpi-val">@Model.NewInquiries</div><div class="kpi-label">Unread Inquiries</div></div>
+            <div class="kpi-card"><div class="kpi-icon-row"><div class="kpi-icon" style="background:var(--navy-light)"><i class="ti ti-heart" style="color:var(--navy)"></i></div></div><div class="kpi-val">@Model.TotalSaved</div><div class="kpi-label">Total Saved</div></div>
+        </div>
+
+        <div class="dash-table-card" style="margin-bottom:22px">
+            <div class="dash-table-header">
+                <div class="dash-table-title">My Property Listings</div>
+                <a class="btn-teal" href="@myPropertiesUrl">Manage All</a>
+            </div>
+            <table class="table-keh">
+                <thead>
+                    <tr><th>Title</th><th>Type</th><th>Purpose</th><th>Price</th><th>Status</th><th>Views</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var property in Model.RecentProperties)
+                    {
+                        var statusClass = property.Status == "Active" ? "status-active" : property.Status == "Pending" ? "status-pending" : "status-draft";
+                        <tr>
+                            <td class="tbl-title">@property.Title</td>
+                            <td class="tbl-type">@(property.PropertyType != null ? property.PropertyType.Name : "-")</td>
+                            <td>@property.Purpose</td>
+                            <td class="tbl-price">@(!String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price))</td>
+                            <td><span class="status-pill @statusClass">@property.Status</span></td>
+                            <td>@property.ViewsCount</td>
+                            <td class="table-actions">
+                                <div class="admin-action-group">
+                                    <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = property.PropertyId })"><i class="ti ti-eye"></i> View</a>
+                                    <a class="admin-action-btn admin-action-edit" href="@Url.RouteUrl("EditListing", new { id = property.PropertyId })"><i class="ti ti-edit"></i> Edit</a>
+                                    <a class="admin-action-btn admin-action-delete" href="@Url.RouteUrl("DeleteListing", new { id = property.PropertyId })"><i class="ti ti-trash"></i> Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.RecentProperties.Any())
+                    {
+                        <tr><td colspan="7" style="text-align:center;color:var(--muted)">No properties found.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header">
+                <div class="dash-table-title">Recent Inquiries</div>
+                <a class="btn-teal" href="@Url.Action("Inquiries", "Dashboard")">View All</a>
+            </div>
+            <table class="table-keh">
+                <thead>
+                    <tr><th>Property</th><th>Name</th><th>Email</th><th>Message</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var inquiry in Model.RecentInquiries)
+                    {
+                        <tr>
+                            <td class="tbl-title">@(inquiry.Property != null ? inquiry.Property.Title : "-")</td>
+                            <td>@inquiry.FullName</td>
+                            <td>@inquiry.Email</td>
+                            <td>@(inquiry.Message != null && inquiry.Message.Length > 45 ? inquiry.Message.Substring(0, 45) + "..." : inquiry.Message)</td>
+                            <td><span class="status-pill @(inquiry.IsRead ? "status-active" : "status-pending")">@(inquiry.IsRead ? "Read" : "Unread")</span></td>
+                            <td><a class="admin-action-btn admin-action-view" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-eye"></i> View</a></td>
+                        </tr>
+                    }
+                    @if (!Model.RecentInquiries.Any())
+                    {
+                        <tr><td colspan="6" style="text-align:center;color:var(--muted)">No inquiries found.</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

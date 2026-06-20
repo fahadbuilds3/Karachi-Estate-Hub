@@ -1,0 +1,180 @@
+@model KarachiEstateHub.ViewModels.AddPropertyViewModel
+@{
+    var actionName = ViewBag.FormAction as string ?? "Create";
+    var submitText = ViewBag.SubmitText as string ?? "Submit Listing";
+    var myPropertiesUrl = Url.RouteUrl("MyProperties");
+    var formRouteValues = actionName == "Edit" && Model.PropertyId > 0
+        ? (object)new { id = Model.PropertyId }
+        : null;
+}
+
+@using (Html.BeginForm(actionName, "Properties", formRouteValues, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.PropertyId)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger", style = "font-size:12px;margin-bottom:12px" })
+
+    <div class="prop-form-section-title">Basic Information</div>
+    <div class="prop-form-grid">
+        <div class="prop-form-group full-width">
+            @Html.LabelFor(m => m.Title, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.Title, new { @class = "prop-form-input", placeholder = "Modern 5-bedroom corner house" })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group full-width">
+            <label class="prop-form-label">Purpose</label>
+            <div class="purpose-btns">
+                <label class="purpose-btn @(Model.Purpose == "Sale" ? "active" : "")" onclick="selectPurpose(this)">
+                    @Html.RadioButtonFor(m => m.Purpose, "Sale", new { style = "display:none" })
+                    For Sale
+                </label>
+                <label class="purpose-btn @(Model.Purpose == "Rent" ? "active" : "")" onclick="selectPurpose(this)">
+                    @Html.RadioButtonFor(m => m.Purpose, "Rent", new { style = "display:none" })
+                    For Rent
+                </label>
+            </div>
+            @Html.ValidationMessageFor(m => m.Purpose, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.PropertyTypeId, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.PropertyTypeId, Model.PropertyTypes, "Select type", new { @class = "prop-form-select" })
+            @Html.ValidationMessageFor(m => m.PropertyTypeId, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.LocationId, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.LocationId, Model.Locations, "Select location", new { @class = "prop-form-select" })
+            @Html.ValidationMessageFor(m => m.LocationId, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.Price, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.Price, new { @class = "prop-form-input", type = "number", min = "1", placeholder = "25000000" })
+            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.PriceType, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.PriceType, new[]
+            {
+                new SelectListItem { Text = "Total", Value = "Total", Selected = Model.PriceType == "Total" },
+                new SelectListItem { Text = "Monthly", Value = "Monthly", Selected = Model.PriceType == "Monthly" }
+            }, new { @class = "prop-form-select" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.Bedrooms, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.Bedrooms, Enumerable.Range(0, 11).Select(i => new SelectListItem { Text = i == 0 ? "None" : i.ToString(), Value = i.ToString(), Selected = Model.Bedrooms == i }), new { @class = "prop-form-select" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.Bathrooms, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.Bathrooms, Enumerable.Range(0, 11).Select(i => new SelectListItem { Text = i == 0 ? "None" : i.ToString(), Value = i.ToString(), Selected = Model.Bathrooms == i }), new { @class = "prop-form-select" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.AreaSize, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.AreaSize, new { @class = "prop-form-input", type = "number", step = "0.01", min = "1", placeholder = "10" })
+            @Html.ValidationMessageFor(m => m.AreaSize, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.AreaUnit, new { @class = "prop-form-label" })
+            @Html.DropDownListFor(m => m.AreaUnit, new[]
+            {
+                new SelectListItem { Text = "sq ft", Value = "sq ft", Selected = Model.AreaUnit == "sq ft" },
+                new SelectListItem { Text = "sq yd", Value = "sq yd", Selected = Model.AreaUnit == "sq yd" },
+                new SelectListItem { Text = "Marla", Value = "Marla", Selected = Model.AreaUnit == "Marla" },
+                new SelectListItem { Text = "Kanal", Value = "Kanal", Selected = Model.AreaUnit == "Kanal" }
+            }, "Select unit", new { @class = "prop-form-select" })
+            @Html.ValidationMessageFor(m => m.AreaUnit, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+    </div>
+
+    <div class="prop-form-section-title">Location Details</div>
+    <div class="prop-form-grid">
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.BlockOrPhase, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.BlockOrPhase, new { @class = "prop-form-input", placeholder = "Phase 6 / Block H" })
+        </div>
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.StreetAddress, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.StreetAddress, new { @class = "prop-form-input", placeholder = "Street address" })
+        </div>
+        <div class="prop-form-group full-width">
+            @Html.LabelFor(m => m.Description, new { @class = "prop-form-label" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "prop-form-textarea", rows = "5", placeholder = "Describe the property, nearby facilities, and key selling points." })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+    </div>
+
+    <div class="prop-form-section-title">Contact Details</div>
+    <div class="prop-form-grid">
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.ContactNumber, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.ContactNumber, new { @class = "prop-form-input", placeholder = "+92 300 0000000" })
+            @Html.ValidationMessageFor(m => m.ContactNumber, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+        <div class="prop-form-group">
+            @Html.LabelFor(m => m.WhatsAppNumber, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.WhatsAppNumber, new { @class = "prop-form-input", placeholder = "+92 300 0000000" })
+            @Html.ValidationMessageFor(m => m.WhatsAppNumber, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+        <div class="prop-form-group full-width">
+            @Html.LabelFor(m => m.ContactEmail, new { @class = "prop-form-label" })
+            @Html.TextBoxFor(m => m.ContactEmail, new { @class = "prop-form-input", placeholder = "agent@example.com" })
+            @Html.ValidationMessageFor(m => m.ContactEmail, "", new { @class = "text-danger", style = "font-size:12px" })
+        </div>
+    </div>
+
+    <div class="prop-form-section-title">Amenities</div>
+    <div class="amenities-grid">
+        @foreach (var amenity in Model.Amenities)
+        {
+            <label class="amenity-item">
+                <input type="checkbox" name="SelectedAmenityIds" value="@amenity.AmenityId" @(Model.SelectedAmenityIds != null && Model.SelectedAmenityIds.Contains(amenity.AmenityId) ? "checked" : "") />
+                <i class="@(!String.IsNullOrWhiteSpace(amenity.IconClass) ? amenity.IconClass : "ti ti-check")"></i>
+                @amenity.Name
+            </label>
+        }
+    </div>
+
+    if (Model.ExistingImages != null && Model.ExistingImages.Any())
+    {
+        <div class="prop-form-section-title">Existing Images</div>
+        <div class="gallery-thumbs" style="margin-bottom:18px">
+            @foreach (var image in Model.ExistingImages)
+            {
+                <div class="gallery-thumb" style="background:linear-gradient(135deg,#0D6B5E,#1a8a7a);display:flex;align-items:center;justify-content:center;position:relative">
+                    <i class="ti ti-photo" style="font-size:24px;color:rgba(255,255,255,.35)"></i>
+                    @if (!String.IsNullOrWhiteSpace(image.ImageUrl))
+                    {
+                        <img class="property-image-cover" src="@Url.Content(image.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(image.AltText) ? image.AltText : "Property image")" onerror="this.style.display='none';" />
+                    }
+                    @if (image.IsPrimary)
+                    {
+                        <span class="pill badge-featured" style="position:absolute;bottom:4px;left:4px">Main</span>
+                    }
+                </div>
+            }
+        </div>
+    }
+
+    <div class="prop-form-section-title">Images</div>
+    <div class="prop-form-group">
+        <label class="prop-form-label">Upload Property Images</label>
+        <input class="prop-form-input" type="file" name="images" id="propertyImages" multiple accept=".jpg,.jpeg,.png,.webp" onchange="previewPropertyImages(this, 'imagePreview')" />
+        <div id="imagePreview" class="gallery-thumbs" style="margin-top:10px"></div>
+        <span style="font-size:11px;color:var(--muted)">Allowed: JPG, JPEG, PNG, WEBP. Max 5MB per image.</span>
+    </div>
+
+    <div class="prop-form-footer">
+        <a class="btn-outline" href="@myPropertiesUrl">Cancel</a>
+        <div style="display:flex;gap:8px">
+            <button class="btn-outline" type="submit" name="submitAction" value="Draft">Save as Draft</button>
+            <button class="btn-teal" type="submit" name="submitAction" value="Submit" style="padding:10px 28px;font-size:14px;font-weight:700">@submitText</button>
+        </div>
+    </div>
+}

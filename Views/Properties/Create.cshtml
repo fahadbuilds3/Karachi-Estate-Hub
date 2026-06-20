@@ -1,0 +1,22 @@
+@model KarachiEstateHub.ViewModels.AddPropertyViewModel
+@{
+    ViewBag.Title = "Add Property";
+    ViewBag.FormAction = "Create";
+    ViewBag.SubmitText = "Submit Listing";
+}
+
+<div class="add-prop-layout">
+    <div class="add-prop-header">
+        <p class="section-eyebrow">Property Submission</p>
+        <h1>Add Property</h1>
+        <p>Submit a property listing for review. Approved listings will appear publicly after review.</p>
+    </div>
+
+    <div class="add-prop-steps">
+        <div class="add-prop-step active"><span class="step-num">1</span> Property Details</div>
+        <div class="add-prop-step"><span class="step-num">2</span> Images</div>
+        <div class="add-prop-step"><span class="step-num">3</span> Review</div>
+    </div>
+
+    @Html.Partial("_PropertyForm", Model)
+</div>

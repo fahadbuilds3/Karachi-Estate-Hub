@@ -1,0 +1,22 @@
+@model KarachiEstateHub.ViewModels.AddPropertyViewModel
+@{
+    ViewBag.Title = "Edit Property";
+    ViewBag.FormAction = "Edit";
+    ViewBag.SubmitText = "Update Property";
+}
+
+<div class="add-prop-layout">
+    <div class="add-prop-header">
+        <p class="section-eyebrow">Property Management</p>
+        <h1>Edit Property</h1>
+        <p>Update property details. Agent edits to active listings are sent back to pending review.</p>
+    </div>
+
+    <div class="add-prop-steps">
+        <div class="add-prop-step active"><span class="step-num">1</span> Property Details</div>
+        <div class="add-prop-step"><span class="step-num">2</span> Images</div>
+        <div class="add-prop-step"><span class="step-num">3</span> Review</div>
+    </div>
+
+    @Html.Partial("_PropertyForm", Model)
+</div>

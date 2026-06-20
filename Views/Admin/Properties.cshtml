@@ -1,0 +1,71 @@
+@model KarachiEstateHub.ViewModels.AdminPropertiesViewModel
+@{
+    ViewBag.Title = "Manage Properties";
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo"><div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div><div class="dash-sidebar-logo-text">Admin</div></div>
+        <div class="dash-nav-section">Admin</div>
+        <a class="dash-nav-item" href="@Url.Action("Index", "Admin")"><i class="ti ti-layout-dashboard"></i><span>Admin Dashboard</span></a>
+        <a class="dash-nav-item active" href="@Url.Action("Properties", "Admin")"><i class="ti ti-building"></i><span>Manage Properties</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Users", "Admin")"><i class="ti ti-users"></i><span>Manage Users</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-message-circle"></i><span>Inquiries</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header"><div><div class="dash-header-title">Manage Properties</div><div class="dash-header-sub">@Model.ResultCount properties found.</div></div></div>
+
+        <form method="get" class="dash-table-card" style="padding:14px;margin-bottom:18px">
+            <div class="prop-form-grid">
+                <select class="prop-form-select" name="status">
+                    <option value="">All Status</option>
+                    @foreach (var s in new[] { "Pending", "Active", "Draft", "Rejected" }) { <option value="@s" @(Model.SelectedStatus == s ? "selected" : "")>@s</option> }
+                </select>
+                <select class="prop-form-select" name="purpose">
+                    <option value="">All Purpose</option><option value="Sale" @(Model.SelectedPurpose == "Sale" ? "selected" : "")>Sale</option><option value="Rent" @(Model.SelectedPurpose == "Rent" ? "selected" : "")>Rent</option>
+                </select>
+                <select class="prop-form-select" name="propertyTypeId"><option value="">All Types</option>@foreach (var t in Model.PropertyTypes) { <option value="@t.PropertyTypeId" @(Model.SelectedPropertyTypeId == t.PropertyTypeId ? "selected" : "")>@t.Name</option> }</select>
+                <select class="prop-form-select" name="locationId"><option value="">All Locations</option>@foreach (var l in Model.Locations) { <option value="@l.LocationId" @(Model.SelectedLocationId == l.LocationId ? "selected" : "")>@l.Name</option> }</select>
+                <input class="prop-form-input" name="searchTerm" value="@Model.SearchTerm" placeholder="Search title" />
+                <button class="btn-teal" type="submit">Filter</button>
+            </div>
+        </form>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header"><div class="dash-table-title">Properties</div></div>
+            <table class="table-keh">
+                <thead><tr><th>Title</th><th>Agent/User</th><th>Type</th><th>Purpose</th><th>Location</th><th>Price</th><th>Status</th><th>Featured</th><th>Verified</th><th>Created</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var p in Model.Properties)
+                    {
+                        var statusClass = p.Status == "Active" ? "status-active" : p.Status == "Pending" ? "status-pending" : "status-draft";
+                        <tr>
+                            <td class="tbl-title">@p.Title</td><td>@(p.User != null ? p.User.FullName : "-")</td><td>@(p.PropertyType != null ? p.PropertyType.Name : "-")</td><td>@p.Purpose</td><td>@(p.Location != null ? p.Location.Name : "-")</td><td class="tbl-price">@p.PriceLabel</td>
+                            <td><span class="status-pill @statusClass">@p.Status</span></td><td>@(p.IsFeatured ? "Yes" : "No")</td><td>@(p.IsVerified ? "Yes" : "No")</td><td>@p.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td class="table-actions">
+                                <div class="admin-action-group">
+                                <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = p.PropertyId })"><i class="ti ti-eye"></i> View</a>
+                                <a class="admin-action-btn admin-action-edit" href="@Url.RouteUrl("EditListing", new { id = p.PropertyId })"><i class="ti ti-edit"></i> Edit</a>
+                                <a class="admin-action-btn admin-action-delete" href="@Url.RouteUrl("DeleteListing", new { id = p.PropertyId })"><i class="ti ti-trash"></i> Delete</a>
+                                @if (p.Status != "Active")
+                                {
+                                    using (Html.BeginForm("ApproveProperty", "Admin", new { id = p.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-approve" type="submit"><i class="ti ti-check"></i> Approve</button> }
+                                }
+                                @if (p.Status != "Rejected")
+                                {
+                                    using (Html.BeginForm("RejectProperty", "Admin", new { id = p.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-reject" type="submit"><i class="ti ti-x"></i> Reject</button> }
+                                }
+                                @using (Html.BeginForm(p.IsFeatured ? "UnfeatureProperty" : "FeatureProperty", "Admin", new { id = p.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn @(p.IsFeatured ? "admin-action-unfeature" : "admin-action-feature")" type="submit"><i class="ti @(p.IsFeatured ? "ti-star-off" : "ti-star")"></i> @(p.IsFeatured ? "Unfeature" : "Feature")</button> }
+                                @using (Html.BeginForm(p.IsVerified ? "UnverifyProperty" : "VerifyProperty", "Admin", new { id = p.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn @(p.IsVerified ? "admin-action-unverify" : "admin-action-verify")" type="submit"><i class="ti @(p.IsVerified ? "ti-shield-x" : "ti-shield-check")"></i> @(p.IsVerified ? "Unverify" : "Verify")</button> }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Properties.Any()) { <tr><td colspan="11" style="text-align:center;color:var(--muted)">No properties found.</td></tr> }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

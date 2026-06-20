@@ -1,0 +1,3023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karachi Estate Hub – Find Your Perfect Property in Karachi</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.4.0/tabler-icons.min.css" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --teal:       #0D6B5E;
+      --teal-light: #e8f5f2;
+      --teal-mid:   #1a8a7a;
+      --navy:       #1A2744;
+      --navy-light: #eef0f5;
+      --whatsapp:   #25D366;
+      --amber:      #F59E0B;
+      --red:        #e11d48;
+      --bg:         #F7F8FA;
+      --white:      #FFFFFF;
+      --border:     #E5E7EB;
+      --text:       #1A1A2E;
+      --muted:      #6B7280;
+      --light-gray: #F9FAFB;
+    }
+
+    /* ============================================================
+       GLOBAL RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    img { max-width: 100%; display: block; }
+
+    /* ============================================================
+       PAGE NAVIGATION (demo switcher)
+    ============================================================ */
+    .page-switcher {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .page-switcher button {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+
+    .page-switcher button:hover,
+    .page-switcher button.active {
+      background: var(--teal);
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ============================================================
+       UTILITY CLASSES
+    ============================================================ */
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .badge-sale    { background: var(--teal); color: #fff; }
+    .badge-rent    { background: var(--navy); color: #fff; }
+    .badge-featured{ background: var(--amber); color: #fff; }
+    .badge-verified{ background: #E8F5E9; color: #1B5E20; }
+
+    .pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 4px;
+      letter-spacing: .3px;
+    }
+
+    .btn-teal {
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-teal:hover { background: var(--teal-mid); color: #fff; }
+
+    .btn-navy {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-whatsapp {
+      background: var(--whatsapp);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-base {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    .navbar-keh {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .navbar-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--teal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .navbar-logo-icon i { color: #fff; font-size: 18px; }
+
+    .navbar-logo-text {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--teal);
+      letter-spacing: -.3px;
+    }
+
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .navbar-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      transition: color .15s;
+    }
+    .navbar-links a:hover { color: var(--teal); }
+
+    .navbar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .navbar-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    /* mobile nav */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 62px;
+      left: 0; right: 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      z-index: 999;
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a {
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .mobile-menu a:last-child { border: none; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      background: linear-gradient(135deg, #0D6B5E 0%, #0a5049 45%, #1A2744 100%);
+      padding: 64px 32px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 60px; left: -80px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: 40px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.18;
+      margin-bottom: 12px;
+      letter-spacing: -.5px;
+    }
+
+    .hero-sub {
+      color: rgba(255,255,255,.75);
+      font-size: 15px;
+      margin-bottom: 36px;
+    }
+
+    /* Search Card */
+    .search-card {
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
+      padding: 24px 28px 0;
+      box-shadow: 0 -8px 32px rgba(0,0,0,.18);
+      text-align: left;
+    }
+
+    .search-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 18px;
+    }
+
+    .search-tab {
+      background: none;
+      border: none;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: all .15s;
+    }
+    .search-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    .search-filters {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 10px;
+      padding-bottom: 24px;
+      align-items: end;
+    }
+
+    .filter-group label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--bg);
+      appearance: none;
+      font-family: inherit;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      outline: none;
+      border-color: var(--teal);
+      background: var(--white);
+    }
+
+    .search-btn {
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .search-btn:hover { background: var(--teal-mid); }
+
+    /* hero stats */
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 0;
+    }
+    .hero-stat-val { font-size: 20px; font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 3px; }
+    .hero-stat-label { font-size: 11px; color: rgba(255,255,255,.6); }
+
+    /* ============================================================
+       SECTIONS SHARED
+    ============================================================ */
+    .section { padding: 60px 32px; }
+    .section-gray { background: var(--bg); }
+
+    /* ============================================================
+       AREAS GRID
+    ============================================================ */
+    .areas-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .area-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .area-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    .area-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--teal-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .area-icon i { color: var(--teal); font-size: 20px; }
+
+    .area-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .area-count { font-size: 11px; color: var(--muted); }
+
+    /* ============================================================
+       PROPERTY CARDS
+    ============================================================ */
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .prop-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .prop-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(13,107,94,.1);
+    }
+
+    .prop-img {
+      height: 180px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .prop-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .prop-img-placeholder i { font-size: 48px; color: rgba(255,255,255,.25); }
+
+    .prop-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .prop-photo-count {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,.45);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .prop-body { padding: 16px; }
+
+    .prop-price {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--teal);
+      margin-bottom: 4px;
+    }
+
+    .prop-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .prop-location {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .prop-location i { color: var(--teal); font-size: 13px; }
+
+    .prop-specs {
+      display: flex;
+      gap: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #F3F4F6;
+      margin-bottom: 12px;
+    }
+
+    .prop-spec {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #374151;
+    }
+    .prop-spec i { font-size: 14px; color: var(--muted); }
+
+    .prop-actions { display: flex; gap: 6px; }
+
+    .prop-btn-main {
+      flex: 1;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .prop-btn-main:hover { background: var(--teal-mid); }
+
+    .prop-btn-icon {
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .prop-btn-icon i { font-size: 17px; }
+    .prop-btn-icon.wa { background: var(--whatsapp); color: #fff; }
+    .prop-btn-icon.call { background: #fff; border: 1px solid var(--border); color: var(--text); }
+
+    /* ============================================================
+       WHY CHOOSE US
+    ============================================================ */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .why-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 18px;
+      text-align: center;
+    }
+
+    .why-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--teal-light);
+      border-radius: 12px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .why-icon i { color: var(--teal); font-size: 26px; }
+
+    .why-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .why-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+    /* ============================================================
+       CTA SECTION
+    ============================================================ */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      padding: 72px 32px;
+      text-align: center;
+    }
+    .cta-section h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .cta-section p  { color: rgba(255,255,255,.7); font-size: 15px; margin-bottom: 24px; }
+
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: var(--teal);
+      font-size: 14px;
+      font-weight: 800;
+      padding: 13px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+    .cta-btn:hover { transform: scale(1.03); color: var(--teal); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .footer {
+      background: var(--navy);
+      color: #e5e7eb;
+      padding: 52px 32px 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
+    }
+
+    .footer-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .footer-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--teal);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-logo-icon i { color: #fff; font-size: 15px; }
+    .footer-logo-text { font-size: 15px; font-weight: 800; color: #fff; }
+
+    .footer-about { font-size: 12px; color: #9ca3af; line-height: 1.7; max-width: 220px; margin-bottom: 14px; }
+
+    .footer-socials { display: flex; gap: 8px; }
+    .footer-social-btn {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,.08);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .footer-social-btn:hover { background: var(--teal); }
+    .footer-social-btn i { color: #fff; font-size: 16px; }
+
+    .footer-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .footer-link {
+      display: block;
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      transition: color .15s;
+    }
+    .footer-link:hover { color: #fff; }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+    .footer-contact-item i { font-size: 14px; color: var(--teal); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p { font-size: 11px; color: #6b7280; }
+    .footer-bottom a { color: #6b7280; font-size: 11px; margin-left: 16px; }
+    .footer-bottom a:hover { color: #9ca3af; }
+
+    /* ============================================================
+       PAGE 2 – PROPERTY LISTING
+    ============================================================ */
+    .listing-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 62px);
+      background: var(--bg);
+    }
+
+    /* SIDEBAR */
+    .listing-sidebar {
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 62px;
+      height: calc(100vh - 62px);
+      overflow-y: auto;
+    }
+
+    .sidebar-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 20px;
+    }
+
+    .filter-block { margin-bottom: 18px; }
+
+    .filter-block-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      margin-bottom: 8px;
+    }
+
+    .filter-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .filter-check input[type="checkbox"] { accent-color: var(--teal); width: 15px; height: 15px; }
+
+    .bed-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+    .bed-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 12px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .bed-btn.active {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: #fff;
+    }
+
+    .price-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .price-inputs input {
+      padding: 7px 9px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 12px;
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .sidebar-apply {
+      width: 100%;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .sidebar-reset {
+      width: 100%;
+      background: var(--white);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 7px;
+    }
+
+    /* RESULTS AREA */
+    .listing-results { padding: 24px; }
+
+    .results-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .results-count { font-size: 13px; color: var(--muted); }
+    .results-count strong { color: var(--text); }
+
+    .toolbar-right { display: flex; gap: 8px; align-items: center; }
+
+    .sort-select {
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 12px;
+      color: var(--text);
+      font-family: inherit;
+      appearance: none;
+      background: var(--white);
+    }
+
+    .view-btn {
+      width: 32px; height: 32px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--muted);
+    }
+    .view-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    /* list-style property card */
+    .prop-card-list {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      transition: transform .2s;
+    }
+    .prop-card-list:hover { transform: translateY(-2px); }
+
+    .prop-list-img {
+      width: 130px;
+      min-height: 110px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .prop-list-img-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .prop-list-img-inner i { font-size: 32px; color: rgba(255,255,255,.25); }
+
+    .prop-list-body { padding: 12px; flex: 1; }
+    .prop-list-price { font-size: 14px; font-weight: 800; color: var(--teal); margin-bottom: 2px; }
+    .prop-list-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .prop-list-loc { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 3px; margin-bottom: 8px; }
+    .prop-list-loc i { color: var(--teal); font-size: 12px; }
+
+    .prop-list-specs { display: flex; gap: 10px; margin-bottom: 8px; }
+    .prop-list-spec { font-size: 11px; color: #374151; display: flex; align-items: center; gap: 3px; }
+    .prop-list-spec i { font-size: 13px; color: var(--muted); }
+
+    .prop-list-actions { display: flex; gap: 5px; }
+
+    /* Pagination */
+    .pagination-row {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      margin-top: 28px;
+    }
+    .page-btn {
+      width: 34px; height: 34px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .page-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 700; }
+    .page-btn-next {
+      padding: 0 14px; height: 34px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       PAGE 3 – PROPERTY DETAILS
+    ============================================================ */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    .gallery-main {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 4px;
+      position: relative;
+    }
+    .gallery-main-img {
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .gallery-main-img i { font-size: 72px; color: rgba(255,255,255,.2); }
+
+    .gallery-badges-overlay {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .gallery-count-overlay {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .gallery-thumbs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+    .gallery-thumb {
+      height: 68px;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .gallery-thumb:hover { opacity: .8; }
+
+    .detail-price { font-size: 28px; font-weight: 800; color: var(--teal); margin-bottom: 6px; }
+    .detail-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+    .detail-location { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 5px; margin-bottom: 20px; }
+    .detail-location i { color: var(--teal); }
+
+    .spec-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .spec-bar-item {
+      background: var(--white);
+      padding: 14px 8px;
+      text-align: center;
+    }
+    .spec-bar-item i { font-size: 22px; color: var(--teal); display: block; margin-bottom: 4px; }
+    .spec-bar-val { font-size: 14px; font-weight: 700; color: var(--text); }
+    .spec-bar-label { font-size: 10px; color: var(--muted); }
+
+    .detail-section { margin-bottom: 24px; }
+    .detail-section-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .detail-desc { font-size: 13px; color: #4b5563; line-height: 1.75; }
+
+    .amenities-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .amenity-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #374151; }
+    .amenity-item i { color: var(--teal); font-size: 15px; }
+
+    /* Agent Sidebar Card */
+    .agent-card { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+
+    .agent-card-header {
+      background: var(--teal);
+      padding: 20px;
+      text-align: center;
+    }
+    .agent-avatar {
+      width: 64px;
+      height: 64px;
+      background: #fff;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .agent-avatar i { font-size: 32px; color: var(--teal); }
+    .agent-name { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .agent-info { font-size: 11px; color: rgba(255,255,255,.7); margin-bottom: 6px; }
+    .agent-stars i { color: var(--amber); font-size: 13px; }
+
+    .agent-card-body { padding: 16px; }
+    .agent-cta { width: 100%; margin-bottom: 8px; }
+
+    .btn-wa-full {
+      width: 100%;
+      background: var(--whatsapp);
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+    .btn-call-full {
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      padding: 11px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+    .btn-email-full {
+      width: 100%;
+      background: var(--white);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 11px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .save-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .save-card-text { font-size: 12px; }
+    .save-card-text strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+    .save-card-text span { color: var(--muted); font-size: 11px; }
+
+    /* ============================================================
+       PAGE 4 – DASHBOARD
+    ============================================================ */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: calc(100vh - 62px);
+      background: var(--bg);
+    }
+
+    .dash-sidebar {
+      background: var(--navy);
+      padding: 18px 12px;
+      position: sticky;
+      top: 62px;
+      height: calc(100vh - 62px);
+      overflow-y: auto;
+    }
+
+    .dash-sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 24px;
+      padding: 0 6px;
+    }
+    .dash-sidebar-logo-icon {
+      width: 28px; height: 28px;
+      background: var(--teal);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dash-sidebar-logo-icon i { color: #fff; font-size: 15px; }
+    .dash-sidebar-logo-text { font-size: 13px; font-weight: 800; color: #fff; }
+
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 10px;
+      border-radius: 8px;
+      margin-bottom: 2px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .dash-nav-item:hover { background: rgba(255,255,255,.07); }
+    .dash-nav-item.active { background: var(--teal); }
+    .dash-nav-item i { font-size: 17px; color: rgba(255,255,255,.55); }
+    .dash-nav-item.active i { color: #fff; }
+    .dash-nav-item span { font-size: 13px; color: rgba(255,255,255,.6); }
+    .dash-nav-item.active span { color: #fff; font-weight: 600; }
+
+    .dash-nav-section {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255,255,255,.25);
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 10px 10px 4px;
+      margin-top: 6px;
+    }
+
+    .dash-main { padding: 24px; }
+
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+    .dash-header-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .dash-header-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .kpi-icon-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .kpi-icon {
+      width: 40px; height: 40px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .kpi-icon i { font-size: 20px; }
+    .kpi-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+
+    .kpi-val { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .kpi-label { font-size: 11px; color: var(--muted); }
+
+    /* Table */
+    .dash-table-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .dash-table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dash-table-title { font-size: 14px; font-weight: 800; color: var(--text); }
+
+    .table-keh {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table-keh th {
+      text-align: left;
+      padding: 10px 18px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .table-keh td {
+      padding: 12px 18px;
+      font-size: 13px;
+      border-bottom: 1px solid #F9FAFB;
+      vertical-align: middle;
+    }
+    .table-keh tr:last-child td { border-bottom: none; }
+    .table-keh tr:hover td { background: var(--bg); }
+
+    .tbl-price { font-weight: 700; color: var(--teal); }
+    .tbl-title { font-weight: 600; color: var(--text); }
+    .tbl-type { color: var(--muted); }
+
+    .status-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .status-active  { background: var(--teal-light); color: var(--teal); }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-draft   { background: #f3f4f6; color: var(--muted); }
+
+    .tbl-action-btn {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tbl-edit  { background: var(--teal-light); color: var(--teal); }
+    .tbl-del   { background: #fef2f2; color: var(--red); }
+
+    /* ============================================================
+       PAGE 5 – LOGIN / REGISTER
+    ============================================================ */
+    .auth-page {
+      min-height: calc(100vh - 62px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .auth-panel-left {
+      background: linear-gradient(145deg, var(--teal), var(--navy));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      text-align: center;
+    }
+    .auth-panel-left h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .auth-panel-left p { color: rgba(255,255,255,.7); font-size: 14px; max-width: 300px; line-height: 1.7; }
+
+    .auth-features { margin-top: 32px; text-align: left; width: 100%; max-width: 280px; }
+    .auth-feat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .auth-feat-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .auth-feat-icon i { color: #fff; font-size: 18px; }
+    .auth-feat span { font-size: 13px; color: rgba(255,255,255,.8); }
+
+    .auth-panel-right {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+    }
+
+    .auth-form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .auth-logo { text-align: center; margin-bottom: 22px; }
+    .auth-logo-icon {
+      width: 52px; height: 52px;
+      background: var(--teal);
+      border-radius: 13px;
+      margin: 0 auto 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .auth-logo-icon i { color: #fff; font-size: 26px; }
+    .auth-form-title { font-size: 18px; font-weight: 800; color: var(--text); }
+    .auth-form-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    .form-tabs {
+      display: flex;
+      background: var(--bg);
+      border-radius: 9px;
+      padding: 3px;
+      margin-bottom: 18px;
+    }
+    .form-tab {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 8px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .form-tab.active { background: var(--white); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label { font-size: 11px; font-weight: 700; color: #374151; display: block; margin-bottom: 5px; letter-spacing: .3px; }
+    .form-input {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      transition: border .15s;
+    }
+    .form-input:focus { outline: none; border-color: var(--teal); }
+
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .role-option {
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .role-option.active { border-color: var(--teal); background: var(--teal-light); }
+    .role-option i { font-size: 22px; color: var(--muted); display: block; margin-bottom: 4px; }
+    .role-option.active i { color: var(--teal); }
+    .role-option span { font-size: 12px; font-weight: 600; color: var(--muted); }
+    .role-option.active span { color: var(--teal); }
+
+    .form-submit {
+      width: 100%;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .form-submit:hover { background: var(--teal-mid); }
+
+    .form-divider {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 12px 0;
+    }
+
+    .form-secondary {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+    .form-secondary a { color: var(--teal); font-weight: 700; }
+
+    /* ============================================================
+       PAGE 6 – ADD PROPERTY
+    ============================================================ */
+    .add-prop-layout {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 36px 32px;
+    }
+
+    .add-prop-header { margin-bottom: 28px; }
+    .add-prop-header h1 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .add-prop-header p { font-size: 13px; color: var(--muted); }
+
+    .add-prop-steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-bottom: 2px solid var(--border);
+    }
+    .add-prop-step {
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .add-prop-step.active { color: var(--teal); border-bottom-color: var(--teal); }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .add-prop-step.active .step-num { background: var(--teal); color: #fff; }
+
+    .prop-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .full-width { grid-column: 1 / -1; }
+
+    .prop-form-group { display: flex; flex-direction: column; gap: 5px; }
+    .prop-form-label { font-size: 11px; font-weight: 700; color: #374151; letter-spacing: .3px; }
+
+    .prop-form-input,
+    .prop-form-select,
+    .prop-form-textarea {
+      padding: 10px 13px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+    }
+    .prop-form-input:focus,
+    .prop-form-select:focus,
+    .prop-form-textarea:focus { outline: none; border-color: var(--teal); }
+    .prop-form-textarea { resize: vertical; min-height: 100px; }
+
+    .purpose-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .purpose-btn {
+      padding: 10px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all .15s;
+    }
+    .purpose-btn.active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+    .upload-zone:hover { border-color: var(--teal); }
+    .upload-zone i { font-size: 36px; color: #d1d5db; display: block; margin-bottom: 8px; }
+    .upload-zone-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .upload-zone-sub { font-size: 12px; color: var(--muted); }
+
+    .form-section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 12px;
+      margin-top: 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prop-form-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .areas-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .detail-layout { grid-template-columns: 1fr; padding: 20px; }
+      .spec-bar { grid-template-columns: repeat(3, 1fr); }
+      .gallery-thumbs { grid-template-columns: repeat(5, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-links { display: none; }
+      .navbar-keh { padding: 0 16px; }
+      .navbar-hamburger { display: flex; }
+      .navbar-actions .btn-outline { display: none; }
+
+      .hero { padding: 36px 16px 0; }
+      .hero-title { font-size: 26px; }
+      .hero-stats { gap: 20px; }
+      .search-filters { grid-template-columns: 1fr 1fr; }
+      .search-filters .search-btn { grid-column: 1/-1; justify-content: center; }
+
+      .section { padding: 40px 16px; }
+      .areas-grid { grid-template-columns: 1fr 1fr; }
+      .properties-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .cta-section { padding: 48px 20px; }
+      .cta-section h2 { font-size: 22px; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+
+      .listing-layout { grid-template-columns: 1fr; }
+      .listing-sidebar { display: none; }
+      .results-grid { grid-template-columns: 1fr; }
+
+      .dashboard-layout { grid-template-columns: 1fr; }
+      .dash-sidebar { display: none; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-panel-left { display: none; }
+
+      .prop-form-grid { grid-template-columns: 1fr; }
+
+      .page-switcher { bottom: 10px; right: 10px; }
+      .page-switcher button { font-size: 10px; padding: 6px 10px; }
+
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .areas-grid { grid-template-columns: 1fr; }
+      .search-filters { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE SWITCHER (demo navigation)
+============================================================ -->
+<div class="page-switcher" id="pageSwitcher">
+  <button onclick="showPage('home')"     class="active" data-page="home">🏠 Homepage</button>
+  <button onclick="showPage('listing')"  data-page="listing">📋 Listings</button>
+  <button onclick="showPage('detail')"   data-page="detail">🏡 Property Detail</button>
+  <button onclick="showPage('dashboard')" data-page="dashboard">📊 Dashboard</button>
+  <button onclick="showPage('login')"    data-page="login">🔑 Login</button>
+  <button onclick="showPage('addprop')"  data-page="addprop">➕ Add Property</button>
+</div>
+
+
+<!-- ============================================================
+     NAVBAR (shared across all pages)
+============================================================ -->
+<nav class="navbar-keh" id="mainNav">
+  <div class="navbar-logo">
+    <div class="navbar-logo-icon">
+      <i class="ti ti-building-estate"></i>
+    </div>
+    <span class="navbar-logo-text">Karachi Estate Hub</span>
+  </div>
+  <ul class="navbar-links">
+    <li><a href="#" onclick="showPage('listing')">Buy</a></li>
+    <li><a href="#" onclick="showPage('listing')">Rent</a></li>
+    <li><a href="#">Sell</a></li>
+    <li><a href="#">Agents</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="navbar-actions">
+    <button class="btn-outline" onclick="showPage('login')">Login</button>
+    <button class="btn-teal" onclick="showPage('addprop')"><i class="ti ti-plus" style="font-size:13px"></i> Add Property</button>
+    <button class="navbar-hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('listing');toggleMobileMenu()">Buy</a>
+  <a href="#" onclick="showPage('listing');toggleMobileMenu()">Rent</a>
+  <a href="#">Sell</a>
+  <a href="#">Agents</a>
+  <a href="#">Contact</a>
+  <a href="#" onclick="showPage('login');toggleMobileMenu()">Login / Register</a>
+  <a href="#" onclick="showPage('addprop');toggleMobileMenu()" style="color:var(--teal);font-weight:700">+ Add Property</a>
+</div>
+
+
+<!-- ============================================================
+     PAGE 1: HOMEPAGE
+============================================================ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span>🇵🇰</span> Karachi's #1 Property Portal
+      </div>
+      <h1 class="hero-title">Find Your Perfect Property<br>in Karachi</h1>
+      <p class="hero-sub">Search houses, flats, portions, shops, and plots across all major areas of Karachi.</p>
+
+      <!-- Hero Stats -->
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">16,400+</div>
+          <div class="hero-stat-label">Active Listings</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">8</div>
+          <div class="hero-stat-label">Major Areas</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">3,200+</div>
+          <div class="hero-stat-label">Verified Agents</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">98%</div>
+          <div class="hero-stat-label">Satisfied Clients</div>
+        </div>
+      </div>
+
+      <!-- Search Card -->
+      <div class="search-card">
+        <div class="search-tabs">
+          <button class="search-tab active" onclick="switchTab(this)">Buy</button>
+          <button class="search-tab" onclick="switchTab(this)">Rent</button>
+          <button class="search-tab" onclick="switchTab(this)">Commercial</button>
+        </div>
+        <div class="search-filters">
+          <div class="filter-group">
+            <label>Location</label>
+            <select>
+              <option value="">Any Area</option>
+              <option>DHA Defence</option>
+              <option>Clifton</option>
+              <option>Gulshan-e-Iqbal</option>
+              <option>Gulistan-e-Jauhar</option>
+              <option>Bahria Town Karachi</option>
+              <option>Scheme 33</option>
+              <option>Malir</option>
+              <option>North Nazimabad</option>
+              <option>PECHS</option>
+              <option>Nazimabad</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Property Type</label>
+            <select>
+              <option value="">All Types</option>
+              <option>House</option>
+              <option>Flat / Apartment</option>
+              <option>Portion</option>
+              <option>Shop</option>
+              <option>Plot / Land</option>
+              <option>Office</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Price Range</label>
+            <select>
+              <option value="">Any Price</option>
+              <option>Under PKR 50 Lakh</option>
+              <option>PKR 50L – 1 Crore</option>
+              <option>PKR 1 – 2 Crore</option>
+              <option>PKR 2 – 5 Crore</option>
+              <option>PKR 5 Crore+</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Area Size</label>
+            <select>
+              <option value="">Any Size</option>
+              <option>Under 5 Marla</option>
+              <option>5 – 10 Marla</option>
+              <option>10 Marla – 1 Kanal</option>
+              <option>1 Kanal+</option>
+            </select>
+          </div>
+          <button class="search-btn" onclick="showPage('listing')">
+            <i class="ti ti-search"></i> Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR AREAS -->
+  <section class="section section-gray">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+        <div>
+          <p class="section-eyebrow">Explore by Area</p>
+          <h2 class="section-title">Popular Karachi Locations</h2>
+        </div>
+        <a href="#" style="font-size:13px;color:var(--teal);font-weight:600">View all areas →</a>
+      </div>
+      <div class="areas-grid">
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-shield"></i></div>
+          <div><div class="area-name">DHA Defence</div><div class="area-count">2,840 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-waves"></i></div>
+          <div><div class="area-name">Clifton</div><div class="area-count">1,620 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-trees"></i></div>
+          <div><div class="area-name">Gulshan-e-Iqbal</div><div class="area-count">3,210 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-flower"></i></div>
+          <div><div class="area-name">Gulistan-e-Jauhar</div><div class="area-count">1,980 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-building-community"></i></div>
+          <div><div class="area-name">Bahria Town Karachi</div><div class="area-count">4,100 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-map-pin"></i></div>
+          <div><div class="area-name">Scheme 33</div><div class="area-count">890 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-home"></i></div>
+          <div><div class="area-name">Malir</div><div class="area-count">760 listings</div></div>
+        </div>
+        <div class="area-card" onclick="showPage('listing')">
+          <div class="area-icon"><i class="ti ti-building"></i></div>
+          <div><div class="area-name">North Nazimabad</div><div class="area-count">1,340 listings</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROPERTIES -->
+  <section class="section">
+    <div style="max-width:1100px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+        <div>
+          <p class="section-eyebrow">Hand-Picked Listings</p>
+          <h2 class="section-title">Featured Properties</h2>
+        </div>
+        <a href="#" onclick="showPage('listing')" style="font-size:13px;color:var(--teal);font-weight:600">View all listings →</a>
+      </div>
+      <div class="properties-grid">
+
+        <!-- Card 1 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#0D6B5E,#1a8a7a)">
+            <div class="prop-img-placeholder"><i class="ti ti-building-estate"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-sale">For Sale</span>
+              <span class="pill badge-featured">Featured</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 8 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 2.5 Crore</div>
+            <div class="prop-title">Modern 5-Bedroom Corner House</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> DHA Defence, Phase 6</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-bed"></i> 5 Beds</span>
+              <span class="prop-spec"><i class="ti ti-bath"></i> 5 Baths</span>
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 10 Marla</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#1A2744,#2d3e6e)">
+            <div class="prop-img-placeholder"><i class="ti ti-building"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-sale">For Sale</span>
+              <span class="pill badge-verified">✓ Verified</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 6 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 1.8 Crore</div>
+            <div class="prop-title">Luxury 3-Bed Flat with Sea View</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> Clifton, Block 5</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-bed"></i> 3 Beds</span>
+              <span class="prop-spec"><i class="ti ti-bath"></i> 3 Baths</span>
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 2,200 sq ft</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#2d7a6e,#3a9988)">
+            <div class="prop-img-placeholder"><i class="ti ti-home"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-rent">For Rent</span>
+              <span class="pill badge-featured">Featured</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 5 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 85,000/month</div>
+            <div class="prop-title">Spacious 3-Bed Family Apartment</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> Gulshan-e-Iqbal, Block 13</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-bed"></i> 3 Beds</span>
+              <span class="prop-spec"><i class="ti ti-bath"></i> 2 Baths</span>
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 1,800 sq ft</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#374151,#4b5563)">
+            <div class="prop-img-placeholder"><i class="ti ti-map"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-sale">For Sale</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 4 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 1.2 Crore</div>
+            <div class="prop-title">240 Sq Yard Residential Plot</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> Bahria Town, Precinct 10</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 240 sq yd</span>
+              <span class="prop-spec"><i class="ti ti-road"></i> Corner Plot</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#5b4fcf,#7c6ee0)">
+            <div class="prop-img-placeholder"><i class="ti ti-home-2"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-rent">For Rent</span>
+              <span class="pill badge-verified">✓ Verified</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 7 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 60,000/month</div>
+            <div class="prop-title">4-Bed Upper Portion in PECHS</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> PECHS, Block 2</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-bed"></i> 4 Beds</span>
+              <span class="prop-spec"><i class="ti ti-bath"></i> 3 Baths</span>
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 1,600 sq ft</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="prop-card">
+          <div class="prop-img" style="background:linear-gradient(135deg,#b45309,#d97706)">
+            <div class="prop-img-placeholder"><i class="ti ti-building-store"></i></div>
+            <div class="prop-badges">
+              <span class="pill badge-sale">For Sale</span>
+            </div>
+            <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> 3 Photos</div>
+          </div>
+          <div class="prop-body">
+            <div class="prop-price">PKR 85 Lakh</div>
+            <div class="prop-title">Commercial Shop – Ground Floor</div>
+            <div class="prop-location"><i class="ti ti-map-pin"></i> North Nazimabad, Block H</div>
+            <div class="prop-specs">
+              <span class="prop-spec"><i class="ti ti-maximize"></i> 400 sq ft</span>
+              <span class="prop-spec"><i class="ti ti-road"></i> Main Road</span>
+            </div>
+            <div class="prop-actions">
+              <button class="prop-btn-main" onclick="showPage('detail')">View Details</button>
+              <button class="prop-btn-icon wa"><i class="ti ti-brand-whatsapp"></i></button>
+              <button class="prop-btn-icon call"><i class="ti ti-phone"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="section section-gray">
+    <div style="max-width:1100px;margin:0 auto;text-align:center">
+      <p class="section-eyebrow">Why Us</p>
+      <h2 class="section-title" style="margin-bottom:28px">Why Choose Karachi Estate Hub?</h2>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon"><i class="ti ti-shield-check"></i></div>
+          <div class="why-title">Verified Listings</div>
+          <div class="why-desc">Every property is reviewed for accuracy before going live on our platform.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="ti ti-map-search"></i></div>
+          <div class="why-title">Karachi-Focused Search</div>
+          <div class="why-desc">Hyper-local filters for every area, society, and block across Karachi.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="ti ti-message-circle"></i></div>
+          <div class="why-title">Direct Agent Contact</div>
+          <div class="why-desc">WhatsApp and call sellers directly — no middlemen, no unnecessary delays.</div>
+        </div>
+        <div class="why-card">
+          <div class="why-icon"><i class="ti ti-file-plus"></i></div>
+          <div class="why-title">Easy Property Posting</div>
+          <div class="why-desc">List your property in minutes with our guided step-by-step form — it's free.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <i class="ti ti-building-skyscraper" style="font-size:42px;color:rgba(255,255,255,.3);margin-bottom:14px;display:block"></i>
+    <h2>Want to sell or rent your property?</h2>
+    <p>Reach thousands of active buyers and renters across Karachi today.</p>
+    <a href="#" class="cta-btn" onclick="showPage('addprop')">Post Your Property — It's Free</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo-row">
+            <div class="footer-logo-icon"><i class="ti ti-building-estate"></i></div>
+            <span class="footer-logo-text">Karachi Estate Hub</span>
+          </div>
+          <p class="footer-about">Karachi's most trusted platform for buying, selling, and renting residential and commercial properties.</p>
+          <div class="footer-socials">
+            <a class="footer-social-btn" href="#"><i class="ti ti-brand-facebook"></i></a>
+            <a class="footer-social-btn" href="#"><i class="ti ti-brand-instagram"></i></a>
+            <a class="footer-social-btn" href="#"><i class="ti ti-brand-whatsapp"></i></a>
+            <a class="footer-social-btn" href="#"><i class="ti ti-brand-youtube"></i></a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-col-title">Quick Links</div>
+          <a class="footer-link" href="#" onclick="showPage('listing')">Buy Property</a>
+          <a class="footer-link" href="#" onclick="showPage('listing')">Rent Property</a>
+          <a class="footer-link" href="#">Sell Property</a>
+          <a class="footer-link" href="#">Find Agents</a>
+          <a class="footer-link" href="#">Contact Us</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Popular Areas</div>
+          <a class="footer-link" href="#">DHA Defence</a>
+          <a class="footer-link" href="#">Clifton</a>
+          <a class="footer-link" href="#">Gulshan-e-Iqbal</a>
+          <a class="footer-link" href="#">Bahria Town</a>
+          <a class="footer-link" href="#">Scheme 33</a>
+          <a class="footer-link" href="#">North Nazimabad</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Contact</div>
+          <div class="footer-contact-item"><i class="ti ti-map-pin"></i> Karachi, Pakistan</div>
+          <div class="footer-contact-item"><i class="ti ti-mail"></i> info@karachiestatehub.pk</div>
+          <div class="footer-contact-item"><i class="ti ti-phone"></i> +92 21 0000000</div>
+          <div class="footer-contact-item"><i class="ti ti-brand-whatsapp"></i> +92 300 0000000</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Karachi Estate Hub. All rights reserved.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- end page-home -->
+
+
+<!-- ============================================================
+     PAGE 2: PROPERTY LISTING
+============================================================ -->
+<div class="page" id="page-listing">
+  <div class="listing-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="listing-sidebar">
+      <div class="sidebar-title">Filter Properties</div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Purpose</div>
+        <label class="filter-check"><input type="checkbox" checked> For Sale</label>
+        <label class="filter-check"><input type="checkbox"> For Rent</label>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Property Type</div>
+        <label class="filter-check"><input type="checkbox" checked> House</label>
+        <label class="filter-check"><input type="checkbox"> Flat / Apartment</label>
+        <label class="filter-check"><input type="checkbox"> Portion</label>
+        <label class="filter-check"><input type="checkbox"> Shop</label>
+        <label class="filter-check"><input type="checkbox"> Plot / Land</label>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Bedrooms</div>
+        <div class="bed-btns">
+          <button class="bed-btn active">Any</button>
+          <button class="bed-btn" onclick="activateBedBtn(this)">1</button>
+          <button class="bed-btn" onclick="activateBedBtn(this)">2</button>
+          <button class="bed-btn" onclick="activateBedBtn(this)">3</button>
+          <button class="bed-btn" onclick="activateBedBtn(this)">4</button>
+          <button class="bed-btn" onclick="activateBedBtn(this)">5+</button>
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Price Range (PKR)</div>
+        <div class="price-inputs">
+          <input type="text" placeholder="Min Price">
+          <input type="text" placeholder="Max Price">
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Area / Location</div>
+        <select style="width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit">
+          <option>Any Area</option>
+          <option>DHA Defence</option>
+          <option>Clifton</option>
+          <option>Gulshan-e-Iqbal</option>
+          <option>Bahria Town</option>
+        </select>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Area Size</div>
+        <label class="filter-check"><input type="checkbox"> Under 5 Marla</label>
+        <label class="filter-check"><input type="checkbox" checked> 5–10 Marla</label>
+        <label class="filter-check"><input type="checkbox"> 10 Marla–1 Kanal</label>
+        <label class="filter-check"><input type="checkbox"> 1 Kanal+</label>
+      </div>
+
+      <div class="filter-block">
+        <div class="filter-block-title">Features</div>
+        <label class="filter-check"><input type="checkbox"> Verified Only</label>
+        <label class="filter-check"><input type="checkbox"> Featured Only</label>
+        <label class="filter-check"><input type="checkbox"> With Photos</label>
+      </div>
+
+      <button class="sidebar-apply">Apply Filters</button>
+      <button class="sidebar-reset">Reset All</button>
+    </aside>
+
+    <!-- RESULTS -->
+    <main class="listing-results">
+      <div class="results-toolbar">
+        <div class="results-count"><strong>1,284 properties</strong> found in Karachi</div>
+        <div class="toolbar-right">
+          <select class="sort-select">
+            <option>Newest First</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Most Popular</option>
+          </select>
+          <button class="view-btn active"><i class="ti ti-layout-grid"></i></button>
+          <button class="view-btn"><i class="ti ti-list"></i></button>
+        </div>
+      </div>
+
+      <div class="results-grid">
+        <!-- List-style property cards -->
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#0D6B5E,#1a8a7a)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-sale">For Sale</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-building-estate"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 2.5 Crore</div>
+            <div class="prop-list-title">5-Bed Corner House</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> DHA Phase 6</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-bed"></i> 5</span>
+              <span class="prop-list-spec"><i class="ti ti-bath"></i> 5</span>
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 10 Marla</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#1A2744,#2d3e6e)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-rent">For Rent</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-building"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 85,000/mo</div>
+            <div class="prop-list-title">Luxury 3-Bed Flat</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> Clifton Block 5</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-bed"></i> 3</span>
+              <span class="prop-list-spec"><i class="ti ti-bath"></i> 2</span>
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 1,800 sq ft</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#2d7a6e,#3a9988)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-sale">For Sale</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-home"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 1.2 Crore</div>
+            <div class="prop-list-title">4-Bed House – Gulshan</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> Gulshan Block 13</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-bed"></i> 4</span>
+              <span class="prop-list-spec"><i class="ti ti-bath"></i> 3</span>
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 240 sq yd</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#374151,#4b5563)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-rent">For Rent</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-building-store"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 45,000/mo</div>
+            <div class="prop-list-title">Commercial Shop</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> Scheme 33</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-bath"></i> 1</span>
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 600 sq ft</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#b45309,#d97706)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-sale">For Sale</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-map"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 95 Lakh</div>
+            <div class="prop-list-title">Residential Plot – Jauhar</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> Gulistan-e-Jauhar</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 200 sq yd</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="prop-card-list">
+          <div class="prop-list-img" style="background:linear-gradient(135deg,#5b4fcf,#7c6ee0)">
+            <div style="position:absolute;top:8px;left:8px"><span class="pill badge-rent">For Rent</span></div>
+            <div class="prop-list-img-inner"><i class="ti ti-home-2"></i></div>
+          </div>
+          <div class="prop-list-body">
+            <div class="prop-list-price">PKR 60,000/mo</div>
+            <div class="prop-list-title">Upper Portion – PECHS</div>
+            <div class="prop-list-loc"><i class="ti ti-map-pin"></i> PECHS Block 2</div>
+            <div class="prop-list-specs">
+              <span class="prop-list-spec"><i class="ti ti-bed"></i> 4</span>
+              <span class="prop-list-spec"><i class="ti ti-bath"></i> 3</span>
+              <span class="prop-list-spec"><i class="ti ti-maximize"></i> 1,600 sq ft</span>
+            </div>
+            <div class="prop-list-actions">
+              <button style="background:var(--teal);color:#fff;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer" onclick="showPage('detail')">Details</button>
+              <button style="background:var(--whatsapp);color:#fff;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;display:flex;align-items:center"><i class="ti ti-brand-whatsapp" style="font-size:13px"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-row">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">4</button>
+        <button class="page-btn">5</button>
+        <button class="page-btn">…</button>
+        <button class="page-btn">42</button>
+        <button class="page-btn-next">Next →</button>
+      </div>
+
+    </main>
+  </div>
+</div><!-- end page-listing -->
+
+
+<!-- ============================================================
+     PAGE 3: PROPERTY DETAILS
+============================================================ -->
+<div class="page" id="page-detail">
+  <div style="background:var(--bg);min-height:calc(100vh - 62px)">
+    <div class="detail-layout">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- Gallery -->
+        <div class="gallery-main">
+          <div class="gallery-main-img" style="background:linear-gradient(135deg,#0D6B5E,#1A2744)">
+            <i class="ti ti-building-estate"></i>
+            <div class="gallery-badges-overlay">
+              <span class="pill badge-sale">For Sale</span>
+              <span class="pill badge-featured">Featured</span>
+              <span class="pill badge-verified">✓ Verified</span>
+            </div>
+            <div class="gallery-count-overlay"><i class="ti ti-photo"></i> 8 Photos</div>
+          </div>
+        </div>
+        <div class="gallery-thumbs" style="margin-bottom:24px">
+          <div class="gallery-thumb" style="background:linear-gradient(135deg,#0D6B5E,#1a8a7a);border-radius:4px"></div>
+          <div class="gallery-thumb" style="background:linear-gradient(135deg,#1A2744,#2d3e6e);border-radius:4px"></div>
+          <div class="gallery-thumb" style="background:linear-gradient(135deg,#374151,#4b5563);border-radius:4px"></div>
+          <div class="gallery-thumb" style="background:linear-gradient(135deg,#2d7a6e,#3a9988);border-radius:4px"></div>
+          <div class="gallery-thumb" style="background:linear-gradient(135deg,#b45309,#d97706);border-radius:4px;display:flex;align-items:center;justify-content:center">
+            <span style="color:#fff;font-size:12px;font-weight:700">+4</span>
+          </div>
+        </div>
+
+        <div class="detail-price">PKR 2.5 Crore</div>
+        <div class="detail-title">Modern 5-Bedroom Corner House</div>
+        <div class="detail-location"><i class="ti ti-map-pin"></i> DHA Defence, Phase 6, Karachi</div>
+
+        <!-- Spec Bar -->
+        <div class="spec-bar">
+          <div class="spec-bar-item"><i class="ti ti-bed"></i><div class="spec-bar-val">5</div><div class="spec-bar-label">Bedrooms</div></div>
+          <div class="spec-bar-item"><i class="ti ti-bath"></i><div class="spec-bar-val">5</div><div class="spec-bar-label">Bathrooms</div></div>
+          <div class="spec-bar-item"><i class="ti ti-maximize"></i><div class="spec-bar-val">10 Marla</div><div class="spec-bar-label">Area</div></div>
+          <div class="spec-bar-item"><i class="ti ti-home"></i><div class="spec-bar-val">House</div><div class="spec-bar-label">Type</div></div>
+          <div class="spec-bar-item"><i class="ti ti-calendar"></i><div class="spec-bar-val">2019</div><div class="spec-bar-label">Year Built</div></div>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-section">
+          <div class="detail-section-title">Description</div>
+          <p class="detail-desc">A beautifully designed 5-bedroom corner house in one of DHA Phase 6's most sought-after streets. The property features a spacious double-height drawing room, a modern kitchen with fitted cabinets and granite counters, a separate dining area, servant quarter with bathroom, large rooftop garden area, and underground water storage. Double unit electricity and gas connections are available. The house is ready to move in and in immaculate condition. Ideal for a large family seeking premium living in a secure, gated community.</p>
+        </div>
+
+        <!-- Amenities -->
+        <div class="detail-section">
+          <div class="detail-section-title">Amenities</div>
+          <div class="amenities-grid">
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Walled + Gated</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Backup Generator</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> CCTV Security</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Solar Panels</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Central AC</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Double Unit Gas</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Servant Quarter</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Rooftop Access</div>
+            <div class="amenity-item"><i class="ti ti-circle-check"></i> Parking (3 Cars)</div>
+          </div>
+        </div>
+
+        <!-- Location Map placeholder -->
+        <div class="detail-section">
+          <div class="detail-section-title">Location</div>
+          <div style="height:180px;background:var(--bg);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted)">
+            <div style="text-align:center">
+              <i class="ti ti-map" style="font-size:32px;display:block;margin-bottom:6px;color:var(--teal)"></i>
+              <p style="font-size:13px">Map view — DHA Phase 6, Karachi</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (Agent) -->
+      <div>
+        <div class="agent-card">
+          <div class="agent-card-header">
+            <div class="agent-avatar"><i class="ti ti-user"></i></div>
+            <div class="agent-name">Ali Hassan</div>
+            <div class="agent-info">DHA Specialist · 127 Listings</div>
+            <div class="agent-stars">
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <i class="ti ti-star-filled"></i>
+              <span style="color:rgba(255,255,255,.7);font-size:11px;margin-left:5px">5.0 (84 reviews)</span>
+            </div>
+          </div>
+          <div class="agent-card-body">
+            <button class="btn-wa-full"><i class="ti ti-brand-whatsapp"></i> WhatsApp Agent</button>
+            <button class="btn-call-full"><i class="ti ti-phone"></i> Call Agent</button>
+            <button class="btn-email-full"><i class="ti ti-mail"></i> Send Email</button>
+          </div>
+        </div>
+
+        <div class="save-card" style="margin-bottom:14px">
+          <div style="color:var(--red)"><i class="ti ti-heart" style="font-size:22px"></i></div>
+          <div class="save-card-text">
+            <strong>Save Property</strong>
+            <span>Add to your shortlist for quick access later.</span>
+          </div>
+        </div>
+
+        <!-- Quick details card -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px;text-transform:uppercase;letter-spacing:.4px">Property Quick Facts</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <span style="color:var(--muted)">Property ID</span>
+              <span style="font-weight:600">#KEH-10284</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <span style="color:var(--muted)">Purpose</span>
+              <span style="font-weight:600;color:var(--teal)">For Sale</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <span style="color:var(--muted)">Type</span>
+              <span style="font-weight:600">House</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid var(--border);padding-bottom:8px">
+              <span style="color:var(--muted)">Price / Sq Ft</span>
+              <span style="font-weight:600">PKR 5,681</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px">
+              <span style="color:var(--muted)">Listed On</span>
+              <span style="font-weight:600">12 Oct 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- end page-detail -->
+
+
+<!-- ============================================================
+     PAGE 4: DASHBOARD
+============================================================ -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <nav class="dash-sidebar">
+      <div class="dash-sidebar-logo">
+        <div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div>
+        <span class="dash-sidebar-logo-text">Estate Hub</span>
+      </div>
+
+      <div class="dash-nav-section">Main</div>
+      <div class="dash-nav-item active"><i class="ti ti-dashboard"></i><span>Dashboard</span></div>
+      <div class="dash-nav-item" onclick="showPage('listing')"><i class="ti ti-building"></i><span>My Properties</span></div>
+      <div class="dash-nav-item" onclick="showPage('addprop')"><i class="ti ti-plus"></i><span>Add Property</span></div>
+      <div class="dash-nav-item"><i class="ti ti-message-circle"></i><span>Inquiries <span style="background:var(--amber);color:#fff;font-size:9px;padding:1px 6px;border-radius:20px;margin-left:4px">7</span></span></div>
+      <div class="dash-nav-item"><i class="ti ti-heart"></i><span>Saved</span></div>
+
+      <div class="dash-nav-section">Account</div>
+      <div class="dash-nav-item"><i class="ti ti-user"></i><span>Profile</span></div>
+      <div class="dash-nav-item"><i class="ti ti-settings"></i><span>Settings</span></div>
+      <div class="dash-nav-item" onclick="showPage('login')"><i class="ti ti-logout"></i><span>Logout</span></div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <div class="dash-header-title">Welcome back, Ali Hassan 👋</div>
+          <div class="dash-header-sub">Here's what's happening with your listings today.</div>
+        </div>
+        <button class="btn-teal" onclick="showPage('addprop')"><i class="ti ti-plus"></i> Add New Property</button>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon" style="background:#e8f5f2"><i class="ti ti-building" style="color:var(--teal)"></i></div>
+            <span class="kpi-badge" style="background:#e8f5f2;color:var(--teal)">+3 this week</span>
+          </div>
+          <div class="kpi-val">24</div>
+          <div class="kpi-label">Total Properties</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon" style="background:var(--navy-light)"><i class="ti ti-eye" style="color:var(--navy)"></i></div>
+            <span class="kpi-badge" style="background:var(--navy-light);color:var(--navy)">75%</span>
+          </div>
+          <div class="kpi-val">18</div>
+          <div class="kpi-label">Active Listings</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon" style="background:#fef3c7"><i class="ti ti-message-circle" style="color:#b45309"></i></div>
+            <span class="kpi-badge" style="background:#fef3c7;color:#b45309">New</span>
+          </div>
+          <div class="kpi-val">7</div>
+          <div class="kpi-label">New Inquiries</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon-row">
+            <div class="kpi-icon" style="background:#fef2f2"><i class="ti ti-heart" style="color:var(--red)"></i></div>
+            <span class="kpi-badge" style="background:#fef2f2;color:var(--red)">↑ 12%</span>
+          </div>
+          <div class="kpi-val">142</div>
+          <div class="kpi-label">Saved by Users</div>
+        </div>
+      </div>
+
+      <!-- Property Table -->
+      <div class="dash-table-card">
+        <div class="dash-table-header">
+          <div class="dash-table-title">My Property Listings</div>
+          <div style="display:flex;gap:8px">
+            <input placeholder="Search listings..." style="padding:7px 12px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:inherit;width:180px">
+            <button class="btn-teal" onclick="showPage('addprop')"><i class="ti ti-plus"></i> Add New</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="table-keh">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Listed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tbl-title">DHA Phase 6 – Corner House</td>
+                <td class="tbl-type">House · Sale</td>
+                <td class="tbl-type">DHA Phase 6</td>
+                <td class="tbl-price">PKR 2.5 Crore</td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td class="tbl-type">12 Oct 2025</td>
+                <td>
+                  <button class="tbl-action-btn tbl-edit" title="Edit"><i class="ti ti-edit" style="font-size:14px"></i></button>
+                  <button class="tbl-action-btn tbl-del" title="Delete" style="margin-left:4px"><i class="ti ti-trash" style="font-size:14px"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td class="tbl-title">Clifton Block 5 – 3-Bed Flat</td>
+                <td class="tbl-type">Flat · Rent</td>
+                <td class="tbl-type">Clifton</td>
+                <td class="tbl-price">PKR 85,000/mo</td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td class="tbl-type">5 Oct 2025</td>
+                <td>
+                  <button class="tbl-action-btn tbl-edit" title="Edit"><i class="ti ti-edit" style="font-size:14px"></i></button>
+                  <button class="tbl-action-btn tbl-del" title="Delete" style="margin-left:4px"><i class="ti ti-trash" style="font-size:14px"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td class="tbl-title">Gulshan Block 13 – 4-Bed House</td>
+                <td class="tbl-type">House · Sale</td>
+                <td class="tbl-type">Gulshan-e-Iqbal</td>
+                <td class="tbl-price">PKR 1.2 Crore</td>
+                <td><span class="status-pill status-pending">Pending</span></td>
+                <td class="tbl-type">28 Sep 2025</td>
+                <td>
+                  <button class="tbl-action-btn tbl-edit" title="Edit"><i class="ti ti-edit" style="font-size:14px"></i></button>
+                  <button class="tbl-action-btn tbl-del" title="Delete" style="margin-left:4px"><i class="ti ti-trash" style="font-size:14px"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td class="tbl-title">Scheme 33 – Commercial Shop</td>
+                <td class="tbl-type">Shop · Rent</td>
+                <td class="tbl-type">Scheme 33</td>
+                <td class="tbl-price">PKR 45,000/mo</td>
+                <td><span class="status-pill status-draft">Draft</span></td>
+                <td class="tbl-type">20 Sep 2025</td>
+                <td>
+                  <button class="tbl-action-btn tbl-edit" title="Edit"><i class="ti ti-edit" style="font-size:14px"></i></button>
+                  <button class="tbl-action-btn tbl-del" title="Delete" style="margin-left:4px"><i class="ti ti-trash" style="font-size:14px"></i></button>
+                </td>
+              </tr>
+              <tr>
+                <td class="tbl-title">Bahria Town – 240 Sq Yd Plot</td>
+                <td class="tbl-type">Plot · Sale</td>
+                <td class="tbl-type">Bahria Town</td>
+                <td class="tbl-price">PKR 1.2 Crore</td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td class="tbl-type">15 Sep 2025</td>
+                <td>
+                  <button class="tbl-action-btn tbl-edit" title="Edit"><i class="ti ti-edit" style="font-size:14px"></i></button>
+                  <button class="tbl-action-btn tbl-del" title="Delete" style="margin-left:4px"><i class="ti ti-trash" style="font-size:14px"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div><!-- end page-dashboard -->
+
+
+<!-- ============================================================
+     PAGE 5: LOGIN / REGISTER
+============================================================ -->
+<div class="page" id="page-login">
+  <div class="auth-page">
+
+    <!-- Left panel -->
+    <div class="auth-panel-left">
+      <div>
+        <i class="ti ti-building-estate" style="font-size:48px;color:rgba(255,255,255,.5);margin-bottom:16px;display:block"></i>
+        <h2>Karachi's Most Trusted Property Platform</h2>
+        <p>Join thousands of buyers, sellers, and agents already using Karachi Estate Hub.</p>
+        <div class="auth-features">
+          <div class="auth-feat">
+            <div class="auth-feat-icon"><i class="ti ti-shield-check"></i></div>
+            <span>Access to 16,000+ verified listings</span>
+          </div>
+          <div class="auth-feat">
+            <div class="auth-feat-icon"><i class="ti ti-message-circle"></i></div>
+            <span>Direct WhatsApp & call to agents</span>
+          </div>
+          <div class="auth-feat">
+            <div class="auth-feat-icon"><i class="ti ti-heart"></i></div>
+            <span>Save and compare properties easily</span>
+          </div>
+          <div class="auth-feat">
+            <div class="auth-feat-icon"><i class="ti ti-file-plus"></i></div>
+            <span>Post your property for free</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="auth-panel-right">
+      <div class="auth-form-card">
+        <div class="auth-logo">
+          <div class="auth-logo-icon"><i class="ti ti-building-estate"></i></div>
+          <div class="auth-form-title">Karachi Estate Hub</div>
+          <div class="auth-form-sub">Sign in to your account</div>
+        </div>
+
+        <div class="form-tabs">
+          <button class="form-tab active" onclick="switchFormTab(this, 'login')">Sign In</button>
+          <button class="form-tab" onclick="switchFormTab(this, 'register')">Register</button>
+        </div>
+
+        <div id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" placeholder="••••••••">
+          </div>
+
+          <div style="margin-bottom:16px">
+            <div class="form-label" style="margin-bottom:8px">Sign in as</div>
+            <div class="role-grid">
+              <div class="role-option active" onclick="selectRole(this)">
+                <i class="ti ti-user"></i><span>User</span>
+              </div>
+              <div class="role-option" onclick="selectRole(this)">
+                <i class="ti ti-briefcase"></i><span>Agent</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+            <a href="#" style="font-size:12px;color:var(--teal)">Forgot password?</a>
+          </div>
+
+          <button class="form-submit" onclick="showPage('dashboard')">Sign In</button>
+        </div>
+
+        <div id="registerForm" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" type="text" placeholder="Ali Hassan">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" type="email" placeholder="ali@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input class="form-input" type="tel" placeholder="+92 300 0000000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" placeholder="Min. 8 characters">
+          </div>
+          <div style="margin-bottom:16px">
+            <div class="form-label" style="margin-bottom:8px">Register as</div>
+            <div class="role-grid">
+              <div class="role-option active" onclick="selectRole(this)">
+                <i class="ti ti-user"></i><span>Buyer / Renter</span>
+              </div>
+              <div class="role-option" onclick="selectRole(this)">
+                <i class="ti ti-briefcase"></i><span>Agent / Seller</span>
+              </div>
+            </div>
+          </div>
+          <button class="form-submit" onclick="showPage('dashboard')">Create Account</button>
+        </div>
+
+        <div class="form-secondary">
+          <span id="switchFormText">Don't have an account?</span>
+          <a href="#" id="switchFormLink" onclick="document.querySelector('.form-tabs button:last-child').click(); return false"> Register</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><!-- end page-login -->
+
+
+<!-- ============================================================
+     PAGE 6: ADD PROPERTY
+============================================================ -->
+<div class="page" id="page-addprop">
+  <div style="background:var(--bg);min-height:calc(100vh - 62px)">
+    <div class="add-prop-layout">
+
+      <div class="add-prop-header">
+        <h1>Post a New Property</h1>
+        <p>Fill in the details below to list your property on Karachi Estate Hub. It's completely free.</p>
+      </div>
+
+      <!-- Step indicators -->
+      <div class="add-prop-steps">
+        <div class="add-prop-step active"><div class="step-num">1</div> Basic Info</div>
+        <div class="add-prop-step"><div class="step-num">2</div> Location & Size</div>
+        <div class="add-prop-step"><div class="step-num">3</div> Photos & Contact</div>
+        <div class="add-prop-step"><div class="step-num">4</div> Review & Submit</div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px">
+
+        <!-- Section 1: Basic Details -->
+        <div class="form-section-title" style="margin-top:0">Basic Property Details</div>
+        <div class="prop-form-grid">
+
+          <div class="prop-form-group full-width">
+            <label class="prop-form-label">Property Title *</label>
+            <input class="prop-form-input" type="text" placeholder="e.g. Modern 5-Bedroom Corner House in DHA Phase 6">
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Purpose *</label>
+            <div class="purpose-btns">
+              <button class="purpose-btn active" onclick="selectPurpose(this)">For Sale</button>
+              <button class="purpose-btn" onclick="selectPurpose(this)">For Rent</button>
+            </div>
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Property Type *</label>
+            <select class="prop-form-select">
+              <option value="">Select type</option>
+              <option>House</option>
+              <option>Flat / Apartment</option>
+              <option>Portion</option>
+              <option>Shop</option>
+              <option>Plot / Land</option>
+              <option>Office</option>
+              <option>Warehouse</option>
+            </select>
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Price (PKR) *</label>
+            <input class="prop-form-input" type="text" placeholder="e.g. 25000000">
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Price Type</label>
+            <select class="prop-form-select">
+              <option>Total Price</option>
+              <option>Per Month (Rent)</option>
+              <option>Per Sq Ft</option>
+            </select>
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Bedrooms</label>
+            <select class="prop-form-select">
+              <option value="">Select</option>
+              <option>Studio</option>
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6+</option>
+            </select>
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Bathrooms</label>
+            <select class="prop-form-select">
+              <option value="">Select</option>
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6+</option>
+            </select>
+          </div>
+
+          <div class="prop-form-group full-width">
+            <label class="prop-form-label">Description *</label>
+            <textarea class="prop-form-textarea" placeholder="Describe the property — highlight key features, condition, nearby facilities, and any unique selling points..."></textarea>
+          </div>
+
+        </div>
+
+        <!-- Section 2: Location & Size -->
+        <div class="form-section-title">Location & Size</div>
+        <div class="prop-form-grid">
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Area / Locality *</label>
+            <select class="prop-form-select">
+              <option value="">Select area</option>
+              <option>DHA Defence</option>
+              <option>Clifton</option>
+              <option>Gulshan-e-Iqbal</option>
+              <option>Gulistan-e-Jauhar</option>
+              <option>Bahria Town Karachi</option>
+              <option>Scheme 33</option>
+              <option>Malir</option>
+              <option>North Nazimabad</option>
+              <option>PECHS</option>
+              <option>Nazimabad</option>
+              <option>Korangi</option>
+              <option>Landhi</option>
+            </select>
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Block / Phase / Sector</label>
+            <input class="prop-form-input" type="text" placeholder="e.g. Phase 6, Block 13">
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Street / House Number</label>
+            <input class="prop-form-input" type="text" placeholder="e.g. House 14, Street 5">
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Area Size *</label>
+            <input class="prop-form-input" type="text" placeholder="e.g. 10 Marla, 240 sq yd, 2200 sq ft">
+          </div>
+
+          <div class="prop-form-group">
+            <label class="prop-form-label">Area Unit</label>
+            <select class="prop-form-select">
+              <option>Marla</option>
+              <option>Kanal</option>
+              <option>Square Yards</option>
+              <option>Square Feet</option>
+              <option>Acres</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Section 3: Amenities -->
+        <div class="form-section-title">Amenities (tick all that apply)</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px">
+          <label class="filter-check"><input type="checkbox"> Walled + Gated</label>
+          <label class="filter-check"><input type="checkbox"> Backup Generator</label>
+          <label class="filter-check"><input type="checkbox"> CCTV Security</label>
+          <label class="filter-check"><input type="checkbox"> Solar Panels</label>
+          <label class="filter-check"><input type="checkbox"> Central AC</label>
+          <label class="filter-check"><input type="checkbox"> Servant Quarter</label>
+          <label class="filter-check"><input type="checkbox"> Parking Available</label>
+          <label class="filter-check"><input type="checkbox"> Corner Plot</label>
+          <label class="filter-check"><input type="checkbox"> Double Unit Gas</label>
+        </div>
+
+        <!-- Section 4: Photos -->
+        <div class="form-section-title">Property Photos</div>
+        <div class="upload-zone">
+          <i class="ti ti-cloud-upload"></i>
+          <div class="upload-zone-title">Click to upload or drag & drop photos</div>
+          <div class="upload-zone-sub">JPG, PNG or WEBP · Max 5MB per image · Up to 20 photos</div>
+        </div>
+
+        <!-- Section 5: Contact -->
+        <div class="form-section-title">Contact Details</div>
+        <div class="prop-form-grid">
+          <div class="prop-form-group">
+            <label class="prop-form-label">Contact Number *</label>
+            <input class="prop-form-input" type="tel" placeholder="+92 300 0000000">
+          </div>
+          <div class="prop-form-group">
+            <label class="prop-form-label">WhatsApp Number</label>
+            <input class="prop-form-input" type="tel" placeholder="+92 300 0000000">
+          </div>
+          <div class="prop-form-group">
+            <label class="prop-form-label">Your Name *</label>
+            <input class="prop-form-input" type="text" placeholder="Full name">
+          </div>
+          <div class="prop-form-group">
+            <label class="prop-form-label">Email Address</label>
+            <input class="prop-form-input" type="email" placeholder="you@example.com">
+          </div>
+        </div>
+
+        <!-- Form Footer -->
+        <div class="prop-form-footer">
+          <button class="btn-outline" onclick="showPage('dashboard')">← Cancel</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn-outline">Save as Draft</button>
+            <button class="btn-teal" style="padding:10px 28px;font-size:14px;font-weight:700" onclick="showPage('dashboard')">Submit Listing →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div><!-- end page-addprop -->
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // ============================================================
+  // PAGE SWITCHING
+  // ============================================================
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.page-switcher button').forEach(b => {
+      b.classList.toggle('active', b.dataset.page === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Close mobile menu
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ============================================================
+  // MOBILE MENU
+  // ============================================================
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // ============================================================
+  // HERO SEARCH TABS
+  // ============================================================
+  function switchTab(btn) {
+    btn.closest('.search-tabs').querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ============================================================
+  // BEDROOM FILTER BUTTONS
+  // ============================================================
+  function activateBedBtn(btn) {
+    btn.closest('.bed-btns').querySelectorAll('.bed-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // ============================================================
+  // AUTH FORM TABS
+  // ============================================================
+  function switchFormTab(btn, mode) {
+    btn.closest('.form-tabs').querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('loginForm').style.display    = mode === 'login'    ? 'block' : 'none';
+    document.getElementById('registerForm').style.display = mode === 'register' ? 'block' : 'none';
+  }
+
+  // ============================================================
+  // ROLE SELECTION
+  // ============================================================
+  function selectRole(el) {
+    el.closest('.role-grid').querySelectorAll('.role-option').forEach(r => r.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ============================================================
+  // PURPOSE BUTTONS (Add Property)
+  // ============================================================
+  function selectPurpose(btn) {
+    btn.closest('.purpose-btns').querySelectorAll('.purpose-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+@model KarachiEstateHub.ViewModels.AdminDashboardViewModel
+@{
+    ViewBag.Title = "Admin Panel";
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo"><div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div><div class="dash-sidebar-logo-text">Admin</div></div>
+        <div class="dash-nav-section">Admin</div>
+        <a class="dash-nav-item active" href="@Url.Action("Index", "Admin")"><i class="ti ti-layout-dashboard"></i><span>Admin Dashboard</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Properties", "Admin")"><i class="ti ti-building"></i><span>Manage Properties</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Users", "Admin")"><i class="ti ti-users"></i><span>Manage Users</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-message-circle"></i><span>Inquiries</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header">
+            <div><div class="dash-header-title">Admin Dashboard</div><div class="dash-header-sub">Approval, users, and platform overview.</div></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+                @using (Html.BeginForm("SeedSampleProperties", "Admin", FormMethod.Post, new { style = "display:inline" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button class="btn-outline" type="submit">Seed 40 Sample Properties</button>
+                }
+                <a class="btn-outline" href="@Url.Action("SampleData", "Admin")">Sample Data</a>
+                <a class="btn-teal" href="@Url.Action("Properties", "Admin")">Review Properties</a>
+            </div>
+        </div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalUsers</div><div class="kpi-label">Total Users</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalAgents</div><div class="kpi-label">Agents</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalNormalUsers</div><div class="kpi-label">Normal Users</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalProperties</div><div class="kpi-label">Total Properties</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.PendingProperties</div><div class="kpi-label">Pending Properties</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.ActiveProperties</div><div class="kpi-label">Active Properties</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.RejectedProperties</div><div class="kpi-label">Rejected Properties</div></div>
+            <div class="kpi-card"><div class="kpi-val">@Model.TotalInquiries</div><div class="kpi-label">Total Inquiries</div></div>
+        </div>
+
+        <div class="dash-table-card" style="margin-bottom:22px">
+            <div class="dash-table-header"><div class="dash-table-title">Recent Pending Properties</div><a class="btn-teal" href="@Url.Action("Properties", "Admin", new { status = "Pending" })">View All</a></div>
+            <table class="table-keh">
+                <thead><tr><th>Title</th><th>Agent</th><th>Type</th><th>Location</th><th>Price</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var property in Model.RecentPendingProperties)
+                    {
+                        <tr>
+                            <td class="tbl-title">@property.Title</td>
+                            <td>@(property.User != null ? property.User.FullName : "-")</td>
+                            <td>@(property.PropertyType != null ? property.PropertyType.Name : "-")</td>
+                            <td>@(property.Location != null ? property.Location.Name : "-")</td>
+                            <td class="tbl-price">@(!String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price))</td>
+                            <td class="table-actions">
+                                <div class="admin-action-group">
+                                @using (Html.BeginForm("ApproveProperty", "Admin", new { id = property.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-approve" type="submit"><i class="ti ti-check"></i> Approve</button> }
+                                @using (Html.BeginForm("RejectProperty", "Admin", new { id = property.PropertyId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-reject" type="submit"><i class="ti ti-x"></i> Reject</button> }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.RecentPendingProperties.Any()) { <tr><td colspan="6" style="text-align:center;color:var(--muted)">No pending properties.</td></tr> }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header"><div class="dash-table-title">Recent Users</div><a class="btn-teal" href="@Url.Action("Users", "Admin")">Manage Users</a></div>
+            <table class="table-keh">
+                <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Created</th></tr></thead>
+                <tbody>
+                    @foreach (var user in Model.RecentUsers)
+                    {
+                        <tr>
+                            <td class="tbl-title">@user.FullName</td><td>@user.Email</td><td>@user.Phone</td><td>@user.Role</td>
+                            <td><span class="status-pill @(user.IsActive ? "status-active" : "status-draft")">@(user.IsActive ? "Active" : "Inactive")</span></td>
+                            <td>@user.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

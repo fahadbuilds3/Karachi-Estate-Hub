@@ -1,0 +1,90 @@
+@model KarachiEstateHub.Models.Property
+@{
+    var purposeBadgeClass = Model.Purpose == "Rent" ? "badge-rent" : "badge-sale";
+    var purposeText = Model.Purpose == "Rent" ? "For Rent" : "For Sale";
+    var gradient = !String.IsNullOrWhiteSpace(Model.GradientCss) ? Model.GradientCss : "linear-gradient(135deg,#0D6B5E,#1a8a7a)";
+    var iconClass = !String.IsNullOrWhiteSpace(Model.IconClass) ? Model.IconClass : "ti ti-building-estate";
+    var locationName = Model.Location != null ? Model.Location.Name : "Karachi";
+    var address = !String.IsNullOrWhiteSpace(Model.Address) ? Model.Address : locationName;
+    var price = !String.IsNullOrWhiteSpace(Model.PriceLabel) ? Model.PriceLabel : String.Format("PKR {0:N0}", Model.Price);
+    var phone = !String.IsNullOrWhiteSpace(Model.ContactNumber) ? Model.ContactNumber : (Model.User != null ? Model.User.Phone : null);
+    var whatsAppSource = !String.IsNullOrWhiteSpace(Model.WhatsAppNumber) ? Model.WhatsAppNumber : phone;
+    var whatsAppPhone = !String.IsNullOrWhiteSpace(whatsAppSource)
+        ? whatsAppSource.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "")
+        : null;
+    var areaText = Model.AreaSize + (!String.IsNullOrWhiteSpace(Model.AreaUnit) ? " " + Model.AreaUnit : "");
+    var detailsUrl = Model != null && Model.PropertyId > 0
+        ? Url.RouteUrl("ListingDetails", new { id = Model.PropertyId })
+        : Url.RouteUrl("Listings");
+    var activeImages = (Model.Images ?? Enumerable.Empty<KarachiEstateHub.Models.PropertyImage>())
+        .Where(i => i != null && i.IsActive && !String.IsNullOrWhiteSpace(i.ImageUrl))
+        .ToList();
+    var mainImage = activeImages
+        .OrderByDescending(i => i.IsPrimary)
+        .ThenBy(i => i.SortOrder)
+        .FirstOrDefault();
+    var photoCount = activeImages.Any() ? activeImages.Count : Model.PhotoCount;
+}
+
+<div class="prop-card">
+    <div class="prop-img" style="background:@gradient">
+        @if (mainImage != null)
+        {
+            <img class="property-image-cover" src="@Url.Content(mainImage.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(mainImage.AltText) ? mainImage.AltText : Model.Title)" onerror="this.style.display='none';" />
+        }
+        else
+        {
+            <div class="prop-img-placeholder"><i class="@iconClass"></i></div>
+        }
+        <div class="prop-badges">
+            <span class="pill @purposeBadgeClass">@purposeText</span>
+            @if (Model.IsFeatured)
+            {
+                <span class="pill badge-featured">Featured</span>
+            }
+            @if (Model.IsVerified)
+            {
+                <span class="pill badge-verified">✓ Verified</span>
+            }
+        </div>
+        <div class="prop-photo-count"><i class="ti ti-photo" style="font-size:12px"></i> @photoCount Photos</div>
+    </div>
+    <div class="prop-body">
+        <div class="prop-price">@price</div>
+        <div class="prop-title">@Model.Title</div>
+        <div class="prop-location"><i class="ti ti-map-pin"></i> @address</div>
+        <div class="prop-specs">
+            @if (Model.Bedrooms > 0)
+            {
+                <span class="prop-spec"><i class="ti ti-bed"></i> @Model.Bedrooms Beds</span>
+            }
+            @if (Model.Bathrooms > 0)
+            {
+                <span class="prop-spec"><i class="ti ti-bath"></i> @Model.Bathrooms Baths</span>
+            }
+            <span class="prop-spec"><i class="ti ti-maximize"></i> @areaText</span>
+        </div>
+        <div class="prop-actions">
+            <a class="prop-btn-main" href="@detailsUrl">View Details</a>
+
+            @if (!String.IsNullOrWhiteSpace(whatsAppPhone))
+            {
+                <a class="prop-btn-icon wa" href="https://wa.me/@whatsAppPhone" target="_blank" rel="noopener" title="WhatsApp" aria-label="WhatsApp">
+                    <svg class="prop-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" />
+                        <path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 -.5 .5" />
+                    </svg>
+                </a>
+            }
+
+            @if (!String.IsNullOrWhiteSpace(phone))
+            {
+                <a class="prop-btn-icon call" href="tel:@phone" title="Call" aria-label="Call">
+                    <svg class="prop-btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
+                    </svg>
+                </a>
+            }
+        </div>
+    </div>
+</div>

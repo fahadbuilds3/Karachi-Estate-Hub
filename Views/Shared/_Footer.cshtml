@@ -1,0 +1,63 @@
+@{
+    var footerRole = Session["UserRole"] as string;
+    var footerCanAddProperty = footerRole == "Admin" || footerRole == "Agent";
+    var footerCreateUrl = Url.RouteUrl("CreateListing");
+    var footerAddPropertyUrl = footerCanAddProperty
+        ? footerCreateUrl
+        : Url.Action("Login", "Account", new { returnUrl = footerCreateUrl, message = "addProperty" });
+    var footerListingsUrl = Url.RouteUrl("Listings");
+    var footerSaleUrl = Url.RouteUrl("Listings", new { purpose = "Sale" });
+    var footerRentUrl = Url.RouteUrl("Listings", new { purpose = "Rent" });
+}
+
+<footer class="footer">
+    <div style="max-width:1100px;margin:0 auto">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-logo-row">
+                    <div class="footer-logo-icon"><i class="ti ti-building-estate"></i></div>
+                    <span class="footer-logo-text">Karachi Estate Hub</span>
+                </div>
+                <p class="footer-about">Karachi's most trusted platform for buying, selling, and renting residential and commercial properties.</p>
+                <div class="footer-socials">
+                    <a class="footer-social-btn" href="#"><i class="ti ti-brand-facebook"></i></a>
+                    <a class="footer-social-btn" href="#"><i class="ti ti-brand-instagram"></i></a>
+                    <a class="footer-social-btn" href="#"><i class="ti ti-brand-whatsapp"></i></a>
+                    <a class="footer-social-btn" href="#"><i class="ti ti-brand-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-col-title">Quick Links</div>
+                <a class="footer-link" href="@footerSaleUrl">Buy Property</a>
+                <a class="footer-link" href="@footerRentUrl">Rent Property</a>
+                <a class="footer-link" href="@footerAddPropertyUrl">Sell Property</a>
+                <a class="footer-link" href="@Url.Action("About", "Home")">Find Agents</a>
+                <a class="footer-link" href="@Url.Action("Contact", "Home")">Contact Us</a>
+            </div>
+            <div>
+                <div class="footer-col-title">Popular Areas</div>
+                <a class="footer-link" href="@footerListingsUrl">DHA Defence</a>
+                <a class="footer-link" href="@footerListingsUrl">Clifton</a>
+                <a class="footer-link" href="@footerListingsUrl">Gulshan-e-Iqbal</a>
+                <a class="footer-link" href="@footerListingsUrl">Bahria Town</a>
+                <a class="footer-link" href="@footerListingsUrl">Scheme 33</a>
+                <a class="footer-link" href="@footerListingsUrl">North Nazimabad</a>
+            </div>
+            <div>
+                <div class="footer-col-title">Contact</div>
+                <div class="footer-contact-item"><i class="ti ti-map-pin"></i> Karachi, Pakistan</div>
+                <div class="footer-contact-item"><i class="ti ti-mail"></i> info@karachiestatehub.pk</div>
+                <div class="footer-contact-item"><i class="ti ti-phone"></i> +92 21 0000000</div>
+                <div class="footer-contact-item"><i class="ti ti-brand-whatsapp"></i> +92 300 0000000</div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Karachi Estate Hub. All rights reserved.</p>
+            <div>
+                <a href="@Url.Action("About", "Home")">About</a>
+                <a href="@Url.Action("Contact", "Home")">Contact</a>
+                <a href="@footerListingsUrl">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>

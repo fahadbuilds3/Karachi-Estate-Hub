@@ -1,0 +1,88 @@
+@model KarachiEstateHub.ViewModels.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="auth-page">
+    <div class="auth-panel-left">
+        <h2>Join Karachi Estate Hub</h2>
+        <p>Create an account to save your property journey or start connecting with serious buyers and renters.</p>
+        <div class="auth-features">
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-home-search"></i></div><span>Browse trusted Karachi listings</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-message-circle"></i></div><span>Contact agents directly</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-file-plus"></i></div><span>Agent accounts can post properties later</span></div>
+        </div>
+    </div>
+
+    <div class="auth-panel-right">
+        <div class="auth-form-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"><i class="ti ti-building-estate"></i></div>
+                <div class="auth-form-title">Create Account</div>
+                <div class="auth-form-sub">Register with your correct role</div>
+            </div>
+
+            <div class="form-tabs">
+                <a class="form-tab" href="@Url.Action("Login", "Account")">Sign In</a>
+                <a class="form-tab active" href="@Url.Action("Register", "Account")">Register</a>
+            </div>
+
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger", style = "font-size:12px;margin-bottom:12px" })
+
+                <div class="role-grid">
+                    <label class="role-option @(Model.Role == "User" ? "active" : "")" onclick="selectRole(this)">
+                        @Html.RadioButtonFor(m => m.Role, "User", new { style = "display:none" })
+                        <i class="ti ti-user"></i>
+                        <span>Buyer / Renter</span>
+                    </label>
+                    <label class="role-option @(Model.Role == "Agent" ? "active" : "")" onclick="selectRole(this)">
+                        @Html.RadioButtonFor(m => m.Role, "Agent", new { style = "display:none" })
+                        <i class="ti ti-building-store"></i>
+                        <span>Agent / Seller</span>
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger", style = "font-size:12px" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FullName, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-input", placeholder = "Full name" })
+                    @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-input", placeholder = "you@example.com" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PhoneNumber, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-input", placeholder = "+92 300 0000000" })
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-input", placeholder = "Minimum 6 characters" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-input", placeholder = "Confirm password" })
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <button class="form-submit" type="submit">Create Account</button>
+            }
+
+            <div class="form-secondary">
+                Already have an account?
+                <a href="@Url.Action("Login", "Account")">Sign in</a>
+            </div>
+        </div>
+    </div>
+</div>

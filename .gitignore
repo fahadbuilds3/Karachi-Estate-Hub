@@ -1,0 +1,29 @@
+.vs/
+bin/
+obj/
+packages/
+*.user
+*.suo
+*.cache
+*.log
+
+# Visual Studio
+*.rsuser
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# SQL/database local files
+*.mdf
+*.ldf
+*.bak
+
+# Secrets
+appsettings.*.json
+
+# Local config secrets
+Web.config

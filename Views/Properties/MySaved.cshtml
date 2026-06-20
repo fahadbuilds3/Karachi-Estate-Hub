@@ -1,0 +1,41 @@
+@model IEnumerable<KarachiEstateHub.Models.SavedProperty>
+@{
+    ViewBag.Title = "Saved Properties";
+    var listingsUrl = Url.RouteUrl("Listings");
+}
+
+<section class="section section-gray">
+    <div style="max-width:1100px;margin:0 auto">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
+            <div>
+                <p class="section-eyebrow">Saved Listings</p>
+                <h2 class="section-title">My Saved Properties</h2>
+            </div>
+            <a href="@listingsUrl" style="font-size:13px;color:var(--teal);font-weight:600">Browse listings →</a>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="card-base" style="padding:32px;text-align:center">
+                <p class="section-eyebrow">No Saved Properties</p>
+                <h2 class="section-title">Save properties from detail pages to see them here.</h2>
+            </div>
+        }
+        else
+        {
+            <div class="properties-grid">
+                @foreach (var saved in Model)
+                {
+                    <div>
+                        @Html.Partial("_PropertyCard", saved.Property)
+                        @using (Html.BeginForm("Unsave", "Properties", new { id = saved.PropertyId }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button class="btn-outline" type="submit" style="width:100%;margin-top:8px"><i class="ti ti-heart-filled"></i> Remove Saved</button>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

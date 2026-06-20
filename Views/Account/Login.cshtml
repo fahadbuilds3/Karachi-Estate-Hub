@@ -1,0 +1,75 @@
+@model KarachiEstateHub.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="auth-page">
+    <div class="auth-panel-left">
+        <h2>Welcome Back</h2>
+        <p>Sign in to manage your Karachi Estate Hub account and continue your property journey.</p>
+        <div class="auth-features">
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-shield-check"></i></div><span>Secure account access</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-building-estate"></i></div><span>Agent and buyer role support</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-chart-bar"></i></div><span>Dashboard access for agents and admins</span></div>
+        </div>
+    </div>
+
+    <div class="auth-panel-right">
+        <div class="auth-form-card">
+            <div class="auth-logo">
+                <div class="auth-logo-icon"><i class="ti ti-building-estate"></i></div>
+                <div class="auth-form-title">Sign In</div>
+                <div class="auth-form-sub">Login to Karachi Estate Hub</div>
+            </div>
+
+            <div class="form-tabs">
+                <a class="form-tab active" href="@Url.Action("Login", "Account")">Sign In</a>
+                <a class="form-tab" href="@Url.Action("Register", "Account")">Register</a>
+            </div>
+
+            @using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger", style = "font-size:12px;margin-bottom:12px" })
+
+                <div class="role-grid">
+                    <label class="role-option @(Model.Role == "User" ? "active" : "")" onclick="selectRole(this)">
+                        @Html.RadioButtonFor(m => m.Role, "User", new { style = "display:none" })
+                        <i class="ti ti-user"></i>
+                        <span>Buyer / Renter</span>
+                    </label>
+                    <label class="role-option @(Model.Role == "Agent" ? "active" : "")" onclick="selectRole(this)">
+                        @Html.RadioButtonFor(m => m.Role, "Agent", new { style = "display:none" })
+                        <i class="ti ti-building-store"></i>
+                        <span>Agent / Seller</span>
+                    </label>
+                    <label class="role-option @(Model.Role == "Admin" ? "active" : "")" onclick="selectRole(this)" style="grid-column:1/-1">
+                        @Html.RadioButtonFor(m => m.Role, "Admin", new { style = "display:none" })
+                        <i class="ti ti-shield-lock"></i>
+                        <span>Admin</span>
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(m => m.Role, "", new { @class = "text-danger", style = "font-size:12px" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-input", placeholder = "you@example.com" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-input", placeholder = "Password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger", style = "font-size:12px" })
+                </div>
+
+                <button class="form-submit" type="submit">Sign In</button>
+            }
+
+            <div class="form-secondary">
+                New to Karachi Estate Hub?
+                <a href="@Url.Action("Register", "Account")">Create an account</a>
+            </div>
+        </div>
+    </div>
+</div>

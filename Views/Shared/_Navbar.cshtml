@@ -1,0 +1,101 @@
+@{
+    var isLoggedIn = Session["UserId"] != null;
+    var userName = Session["UserName"] as string;
+    var userRole = Session["UserRole"] as string;
+    var canUseDashboard = userRole == "Admin" || userRole == "Agent";
+    var listingsUrl = Url.RouteUrl("Listings");
+    var saleListingsUrl = Url.RouteUrl("Listings", new { purpose = "Sale" });
+    var rentListingsUrl = Url.RouteUrl("Listings", new { purpose = "Rent" });
+    var createUrl = Url.RouteUrl("CreateListing");
+    var myPropertiesUrl = Url.RouteUrl("MyProperties");
+    var mySavedUrl = Url.RouteUrl("MySaved");
+    var aiAssistantUrl = Url.Action("Assistant", "AI");
+    var addPropertyUrl = canUseDashboard
+        ? createUrl
+        : Url.Action("Login", "Account", new { returnUrl = createUrl, message = "addProperty" });
+}
+
+<nav class="navbar-keh" id="mainNav">
+    <a class="navbar-logo" href="@Url.Action("Index", "Home")">
+        <div class="navbar-logo-icon">
+            <i class="ti ti-building-estate"></i>
+        </div>
+        <span class="navbar-logo-text">Karachi Estate Hub</span>
+    </a>
+    <ul class="navbar-links">
+        <li><a href="@saleListingsUrl">Buy</a></li>
+        <li><a href="@rentListingsUrl">Rent</a></li>
+        <li><a href="@addPropertyUrl">Sell</a></li>
+        <li><a href="@aiAssistantUrl">AI Assistant</a></li>
+        <li><a href="@Url.Action("About", "Home")">Agents</a></li>
+        <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
+    </ul>
+    <div class="navbar-actions">
+        @if (!isLoggedIn)
+        {
+            <a class="btn-outline" href="@Url.Action("Login", "Account")">Login</a>
+            <a class="btn-teal" href="@addPropertyUrl"><i class="ti ti-plus" style="font-size:13px"></i> Add Property</a>
+        }
+        else
+        {
+            <span class="btn-outline">Hi, @userName</span>
+            if (userRole == "Admin")
+            {
+                <a class="btn-outline" href="@Url.Action("Index", "Admin")">Admin Panel</a>
+                <a class="btn-outline" href="@Url.Action("Properties", "Admin")">Properties</a>
+                <a class="btn-outline" href="@Url.Action("Users", "Admin")">Users</a>
+            }
+            else if (canUseDashboard)
+            {
+                <a class="btn-outline" href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+                <a class="btn-outline" href="@myPropertiesUrl">My Properties</a>
+                <a class="btn-outline" href="@Url.Action("Inquiries", "Dashboard")">Inquiries</a>
+                <a class="btn-teal" href="@addPropertyUrl"><i class="ti ti-plus" style="font-size:13px"></i> Add Property</a>
+            }
+            else
+            {
+                <a class="btn-outline" href="@mySavedUrl">Saved Properties</a>
+            }
+            <a class="btn-outline" href="@Url.Action("Logout", "Account")">Logout</a>
+        }
+        <button class="navbar-hamburger" type="button" onclick="toggleMobileMenu()" aria-label="Open menu">
+            <i class="ti ti-menu-2"></i>
+        </button>
+    </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="@saleListingsUrl" onclick="toggleMobileMenu()">Buy</a>
+    <a href="@rentListingsUrl" onclick="toggleMobileMenu()">Rent</a>
+    <a href="@addPropertyUrl" onclick="toggleMobileMenu()">Sell</a>
+    <a href="@aiAssistantUrl" onclick="toggleMobileMenu()">AI Assistant</a>
+    <a href="@Url.Action("About", "Home")" onclick="toggleMobileMenu()">Agents</a>
+    <a href="@Url.Action("Contact", "Home")" onclick="toggleMobileMenu()">Contact</a>
+    @if (!isLoggedIn)
+    {
+        <a href="@Url.Action("Login", "Account")" onclick="toggleMobileMenu()">Login / Register</a>
+        <a href="@addPropertyUrl" onclick="toggleMobileMenu()" style="color:var(--teal);font-weight:700">+ Add Property</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Index", "Home")" onclick="toggleMobileMenu()">Hi, @userName</a>
+        if (userRole == "Admin")
+        {
+            <a href="@Url.Action("Index", "Admin")" onclick="toggleMobileMenu()">Admin Panel</a>
+            <a href="@Url.Action("Properties", "Admin")" onclick="toggleMobileMenu()">Properties</a>
+            <a href="@Url.Action("Users", "Admin")" onclick="toggleMobileMenu()">Users</a>
+        }
+        else if (canUseDashboard)
+        {
+            <a href="@Url.Action("Index", "Dashboard")" onclick="toggleMobileMenu()">Dashboard</a>
+            <a href="@myPropertiesUrl" onclick="toggleMobileMenu()">My Properties</a>
+            <a href="@Url.Action("Inquiries", "Dashboard")" onclick="toggleMobileMenu()">Inquiries</a>
+            <a href="@addPropertyUrl" onclick="toggleMobileMenu()" style="color:var(--teal);font-weight:700">+ Add Property</a>
+        }
+        else
+        {
+            <a href="@mySavedUrl" onclick="toggleMobileMenu()">Saved Properties</a>
+        }
+        <a href="@Url.Action("Logout", "Account")" onclick="toggleMobileMenu()">Logout</a>
+    }
+</div>

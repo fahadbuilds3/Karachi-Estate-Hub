@@ -1,0 +1,15 @@
+@{
+    ViewBag.Title = "Access Denied";
+}
+
+<section class="section section-gray">
+    <div style="max-width:620px;margin:0 auto;text-align:center">
+        <div class="card-base" style="padding:36px">
+            <div class="why-icon" style="margin:0 auto 14px"><i class="ti ti-lock"></i></div>
+            <p class="section-eyebrow">Access Denied</p>
+            <h1 class="section-title" style="margin-bottom:10px">You do not have permission to view this page.</h1>
+            <p class="detail-desc" style="margin-bottom:18px">Login with the correct account role or return to the homepage.</p>
+            <a class="btn-teal" href="@Url.Action("Index", "Home")">Go Home</a>
+        </div>
+    </div>
+</section>

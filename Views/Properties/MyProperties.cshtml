@@ -1,0 +1,85 @@
+@model IEnumerable<KarachiEstateHub.Models.Property>
+@{
+    ViewBag.Title = "My Properties";
+    var myPropertiesUrl = Url.RouteUrl("MyProperties");
+    var createUrl = Url.RouteUrl("CreateListing");
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo">
+            <div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div>
+            <div class="dash-sidebar-logo-text">KEH</div>
+        </div>
+        <div class="dash-nav-section">Properties</div>
+        <a class="dash-nav-item active" href="@myPropertiesUrl"><i class="ti ti-building"></i><span>My Properties</span></a>
+        <a class="dash-nav-item" href="@createUrl"><i class="ti ti-plus"></i><span>Add Property</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Index", "Dashboard")"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header">
+            <div>
+                <div class="dash-header-title">My Properties</div>
+                <div class="dash-header-sub">Manage submitted, draft, pending, and active listings.</div>
+            </div>
+            <a class="btn-teal" href="@createUrl"><i class="ti ti-plus"></i> Add Property</a>
+        </div>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header">
+                <div class="dash-table-title">Property Listings</div>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div style="padding:28px;text-align:center">
+                    <p class="section-eyebrow">No Properties</p>
+                    <h2 class="section-title">You have not added any properties yet.</h2>
+                    <a class="btn-teal" href="@createUrl" style="margin-top:14px;display:inline-flex">Add Property</a>
+                </div>
+            }
+            else
+            {
+                <table class="table-keh">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                            <th>Location</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Listed</th>
+                            <th>Views</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var property in Model)
+                        {
+                            var statusClass = property.Status == "Active" ? "status-active" : property.Status == "Pending" ? "status-pending" : "status-draft";
+                            <tr>
+                                <td><span class="tbl-title">@property.Title</span></td>
+                                <td class="tbl-type">@(property.PropertyType != null ? property.PropertyType.Name : "-")</td>
+                                <td>@property.Purpose</td>
+                                <td>@(property.Location != null ? property.Location.Name : "-")</td>
+                                <td class="tbl-price">@(!String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price))</td>
+                                <td><span class="status-pill @statusClass">@property.Status</span></td>
+                                <td>@property.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td>@property.ViewsCount</td>
+                                <td class="table-actions">
+                                    <div class="admin-action-group">
+                                        <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = property.PropertyId })"><i class="ti ti-eye"></i> View</a>
+                                        <a class="admin-action-btn admin-action-edit" href="@Url.RouteUrl("EditListing", new { id = property.PropertyId })"><i class="ti ti-edit"></i> Edit</a>
+                                        <a class="admin-action-btn admin-action-delete" href="@Url.RouteUrl("DeleteListing", new { id = property.PropertyId })"><i class="ti ti-trash"></i> Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </main>
+</div>

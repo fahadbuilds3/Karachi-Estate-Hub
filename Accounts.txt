@@ -1,0 +1,8 @@
+admin@karachiestatehub.pk
+Admin123
+Role: Admin
+
+
+agent@karachiestatehub.pk
+Agent123
+Role: Agent

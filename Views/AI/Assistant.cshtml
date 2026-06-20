@@ -1,0 +1,95 @@
+@model KarachiEstateHub.ViewModels.AIPropertyAssistantViewModel
+
+@{
+    ViewBag.Title = "AI Property Assistant";
+}
+
+<section class="section section-gray">
+    <div class="ai-assistant-wrap">
+        <div class="ai-assistant-hero">
+            <p class="section-eyebrow">Phase 11A</p>
+            <h1 class="section-title">AI Property Assistant</h1>
+            <p>Describe what you need in simple words. The assistant can use Groq to understand your request, then searches only real active Karachi Estate Hub listings.</p>
+        </div>
+
+        <div class="ai-assistant-card">
+            @using (Html.BeginForm("Assistant", "AI", FormMethod.Post, new { @class = "ai-assistant-form" }))
+            {
+                @Html.AntiForgeryToken()
+                <label for="Prompt">What are you looking for?</label>
+                @Html.TextAreaFor(m => m.Prompt, new
+                {
+                    rows = "4",
+                    placeholder = "Example: 3 bedroom flat in Gulshan under 1 crore",
+                    @class = "ai-prompt-input"
+                })
+                @Html.ValidationMessageFor(m => m.Prompt, "", new { @class = "text-danger" })
+
+                <div class="ai-example-row">
+                    <span>Try:</span>
+                    <span>house for rent in DHA</span>
+                    <span>shop in North Nazimabad</span>
+                    <span>3 bedroom flat under 1 crore</span>
+                </div>
+
+                <button class="btn-teal ai-submit-btn" type="submit"><i class="ti ti-sparkles"></i> Ask Assistant</button>
+            }
+        </div>
+
+        @if (!String.IsNullOrWhiteSpace(Model.ServiceMessage))
+        {
+            <div class="ai-service-note">@Model.ServiceMessage</div>
+        }
+
+        @if (!String.IsNullOrWhiteSpace(Model.AIResponse))
+        {
+            <div class="ai-response-card">
+                <div class="ai-response-icon"><i class="ti ti-message-chatbot"></i></div>
+                <div>
+                    <div class="ai-response-title">Assistant Response</div>
+                    <p>@Model.AIResponse</p>
+                </div>
+            </div>
+        }
+
+        @if (Model.SearchIntent != null && !String.IsNullOrWhiteSpace(Model.Prompt))
+        {
+            <div class="ai-intent-card">
+                <span>Intent:</span>
+                <strong>@(Model.SearchIntent.Purpose ?? "Any purpose")</strong>
+                <strong>@(Model.SearchIntent.PropertyType ?? "Any type")</strong>
+                <strong>@(Model.SearchIntent.Location ?? "Any Karachi area")</strong>
+                @if (Model.SearchIntent.Bedrooms.HasValue)
+                {
+                    <strong>@Model.SearchIntent.Bedrooms+ beds</strong>
+                }
+                @if (Model.SearchIntent.MaxPrice.HasValue)
+                {
+                    <strong>Max PKR @Model.SearchIntent.MaxPrice.Value.ToString("N0")</strong>
+                }
+            </div>
+        }
+
+        @if (Model.SuggestedProperties != null && Model.SuggestedProperties.Any())
+        {
+            <div class="ai-results-head">
+                <p class="section-eyebrow">Suggested Matches</p>
+                <h2 class="section-title">Real Active Properties</h2>
+            </div>
+            <div class="properties-grid">
+                @foreach (var property in Model.SuggestedProperties)
+                {
+                    @Html.Partial("_PropertyCard", property)
+                }
+            </div>
+        }
+        else if (!String.IsNullOrWhiteSpace(Model.Prompt))
+        {
+            <div class="card-base ai-empty-card">
+                <p class="section-eyebrow">No Exact Matches</p>
+                <h2 class="section-title">No active properties matched this request.</h2>
+                <p>Try a nearby Karachi area, a broader property type, or a wider budget.</p>
+            </div>
+        }
+    </div>
+</section>

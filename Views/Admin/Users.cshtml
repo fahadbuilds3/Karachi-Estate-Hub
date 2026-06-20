@@ -1,0 +1,61 @@
+@model KarachiEstateHub.ViewModels.AdminUsersViewModel
+@{
+    ViewBag.Title = "Manage Users";
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo"><div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div><div class="dash-sidebar-logo-text">Admin</div></div>
+        <div class="dash-nav-section">Admin</div>
+        <a class="dash-nav-item" href="@Url.Action("Index", "Admin")"><i class="ti ti-layout-dashboard"></i><span>Admin Dashboard</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Properties", "Admin")"><i class="ti ti-building"></i><span>Manage Properties</span></a>
+        <a class="dash-nav-item active" href="@Url.Action("Users", "Admin")"><i class="ti ti-users"></i><span>Manage Users</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-message-circle"></i><span>Inquiries</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header"><div><div class="dash-header-title">Manage Users</div><div class="dash-header-sub">@Model.ResultCount users found.</div></div></div>
+
+        <form method="get" class="dash-table-card" style="padding:14px;margin-bottom:18px">
+            <div class="prop-form-grid">
+                <select class="prop-form-select" name="role"><option value="">All Roles</option>@foreach (var r in new[] { "Admin", "Agent", "User" }) { <option value="@r" @(Model.SelectedRole == r ? "selected" : "")>@r</option> }</select>
+                <select class="prop-form-select" name="status"><option value="">All Status</option><option value="Active" @(Model.SelectedStatus == "Active" ? "selected" : "")>Active</option><option value="Inactive" @(Model.SelectedStatus == "Inactive" ? "selected" : "")>Inactive</option></select>
+                <input class="prop-form-input" name="searchTerm" value="@Model.SearchTerm" placeholder="Search name, email, phone" />
+                <button class="btn-teal" type="submit">Filter</button>
+            </div>
+        </form>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header"><div class="dash-table-title">Users</div></div>
+            <table class="table-keh">
+                <thead><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Created</th><th>Properties</th><th>Saved</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var u in Model.Users)
+                    {
+                        <tr>
+                            <td class="tbl-title">@u.FullName</td><td>@u.Email</td><td>@u.Phone</td><td>@u.Role</td>
+                            <td><span class="status-pill @(u.IsActive ? "status-active" : "status-draft")">@(u.IsActive ? "Active" : "Inactive")</span></td>
+                            <td>@u.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td>@(u.Properties != null ? u.Properties.Count : 0)</td>
+                            <td>@(u.SavedProperties != null ? u.SavedProperties.Count : 0)</td>
+                            <td class="table-actions">
+                                <div class="admin-action-group">
+                                @if (u.IsActive)
+                                {
+                                    using (Html.BeginForm("DeactivateUser", "Admin", new { id = u.UserId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-deactivate" type="submit"><i class="ti ti-user-off"></i> Deactivate</button> }
+                                }
+                                else
+                                {
+                                    using (Html.BeginForm("ActivateUser", "Admin", new { id = u.UserId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button class="admin-action-btn admin-action-activate" type="submit"><i class="ti ti-user-check"></i> Activate</button> }
+                                }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Users.Any()) { <tr><td colspan="9" style="text-align:center;color:var(--muted)">No users found.</td></tr> }
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>

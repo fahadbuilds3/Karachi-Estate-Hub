@@ -1,0 +1,216 @@
+@model KarachiEstateHub.ViewModels.PropertyDetailViewModel
+@{
+    ViewBag.Title = Model.Property.Title;
+    var property = Model.Property;
+    var agent = Model.Agent;
+    var purposeBadgeClass = property.Purpose == "Rent" ? "badge-rent" : "badge-sale";
+    var purposeText = property.Purpose == "Rent" ? "For Rent" : "For Sale";
+    var gradient = !String.IsNullOrWhiteSpace(property.GradientCss) ? property.GradientCss : "linear-gradient(135deg,#0D6B5E,#1a8a7a)";
+    var iconClass = !String.IsNullOrWhiteSpace(property.IconClass) ? property.IconClass : "ti ti-building-estate";
+    var price = !String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price);
+    var areaText = property.AreaSize + (!String.IsNullOrWhiteSpace(property.AreaUnit) ? " " + property.AreaUnit : "");
+    var phone = !String.IsNullOrWhiteSpace(property.ContactNumber) ? property.ContactNumber : (agent != null ? agent.Phone : null);
+    var whatsAppSource = !String.IsNullOrWhiteSpace(property.WhatsAppNumber) ? property.WhatsAppNumber : phone;
+    var email = !String.IsNullOrWhiteSpace(property.ContactEmail) ? property.ContactEmail : (agent != null ? agent.Email : null);
+    var whatsAppPhone = !String.IsNullOrWhiteSpace(whatsAppSource) ? whatsAppSource.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") : null;
+    var activeImages = (Model.Images ?? Enumerable.Empty<KarachiEstateHub.Models.PropertyImage>())
+        .Where(i => i != null && i.IsActive && !String.IsNullOrWhiteSpace(i.ImageUrl))
+        .ToList();
+    var mainImage = activeImages
+        .OrderByDescending(i => i.IsPrimary)
+        .ThenBy(i => i.SortOrder)
+        .FirstOrDefault();
+    var photoCount = activeImages.Any() ? activeImages.Count : property.PhotoCount;
+}
+
+<div class="detail-layout">
+    <main>
+        <div class="gallery-main">
+            <div class="gallery-main-img">
+                @if (mainImage != null)
+                {
+                    <img src="@Url.Content(mainImage.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(mainImage.AltText) ? mainImage.AltText : property.Title)" class="property-image-cover" onerror="this.style.display='none';" />
+                }
+                else
+                {
+                    <i class="@iconClass"></i>
+                }
+                <div class="gallery-badges-overlay">
+                    <span class="pill @purposeBadgeClass">@purposeText</span>
+                    @if (property.IsFeatured)
+                    {
+                        <span class="pill badge-featured">Featured</span>
+                    }
+                    @if (property.IsVerified)
+                    {
+                        <span class="pill badge-verified">✓ Verified</span>
+                    }
+                </div>
+                <div class="gallery-count-overlay"><i class="ti ti-photo"></i> @photoCount Photos</div>
+            </div>
+        </div>
+
+        <div class="gallery-thumbs">
+            @if (activeImages.Any())
+            {
+                foreach (var image in activeImages.OrderByDescending(i => i.IsPrimary).ThenBy(i => i.SortOrder).Take(5))
+                {
+                    <div class="gallery-thumb">
+                        <img src="@Url.Content(image.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(image.AltText) ? image.AltText : property.Title)" class="property-image-cover" onerror="this.style.display='none';" />
+                    </div>
+                }
+                for (var i = activeImages.Count; i < 5; i++)
+                {
+                    <div class="gallery-thumb" style="background:@gradient;display:flex;align-items:center;justify-content:center">
+                        <i class="@iconClass" style="font-size:24px;color:rgba(255,255,255,.25)"></i>
+                    </div>
+                }
+            }
+            else
+            {
+                for (var i = 0; i < 5; i++)
+                {
+                    <div class="gallery-thumb" style="background:@gradient;display:flex;align-items:center;justify-content:center">
+                        <i class="@iconClass" style="font-size:24px;color:rgba(255,255,255,.25)"></i>
+                    </div>
+                }
+            }
+        </div>
+
+        <div style="padding-top:24px">
+            <div class="detail-price">@price</div>
+            <h1 class="detail-title">@property.Title</h1>
+            <div class="detail-location"><i class="ti ti-map-pin"></i> @property.Address</div>
+
+            <div class="spec-bar detail-section">
+                <div class="spec-bar-item"><i class="ti ti-building"></i><div class="spec-bar-val">@(property.PropertyType != null ? property.PropertyType.Name : "Property")</div><div class="spec-bar-label">Type</div></div>
+                <div class="spec-bar-item"><i class="ti ti-bed"></i><div class="spec-bar-val">@property.Bedrooms</div><div class="spec-bar-label">Beds</div></div>
+                <div class="spec-bar-item"><i class="ti ti-bath"></i><div class="spec-bar-val">@property.Bathrooms</div><div class="spec-bar-label">Baths</div></div>
+                <div class="spec-bar-item"><i class="ti ti-maximize"></i><div class="spec-bar-val">@areaText</div><div class="spec-bar-label">Area</div></div>
+                <div class="spec-bar-item"><i class="ti ti-eye"></i><div class="spec-bar-val">@property.ViewsCount</div><div class="spec-bar-label">Views</div></div>
+            </div>
+
+            <section class="detail-section">
+                <h2 class="detail-section-title">Description</h2>
+                <p class="detail-desc">@property.Description</p>
+            </section>
+
+            <section class="detail-section">
+                <h2 class="detail-section-title">Amenities</h2>
+                <div class="amenities-grid">
+                    @foreach (var amenity in Model.Amenities)
+                    {
+                        <div class="amenity-item"><i class="@(!String.IsNullOrWhiteSpace(amenity.IconClass) ? amenity.IconClass : "ti ti-check")"></i> @amenity.Name</div>
+                    }
+                    @if (!Model.Amenities.Any())
+                    {
+                        <div class="amenity-item"><i class="ti ti-info-circle"></i> Amenities will be updated soon</div>
+                    }
+                </div>
+            </section>
+
+            <section class="detail-section">
+                <h2 class="detail-section-title">Quick Facts</h2>
+                <div class="amenities-grid">
+                    <div class="amenity-item"><i class="ti ti-tag"></i> @purposeText</div>
+                    <div class="amenity-item"><i class="ti ti-map-pin"></i> @(property.Location != null ? property.Location.Name : "Karachi")</div>
+                    <div class="amenity-item"><i class="ti ti-calendar"></i> Listed @property.CreatedAt.ToString("MMM dd, yyyy")</div>
+                    <div class="amenity-item"><i class="ti ti-shield-check"></i> @(property.IsVerified ? "Verified" : "Unverified")</div>
+                    <div class="amenity-item"><i class="ti ti-star"></i> @(property.IsFeatured ? "Featured" : "Standard")</div>
+                    <div class="amenity-item"><i class="ti ti-photo"></i> @photoCount Photos</div>
+                </div>
+            </section>
+
+            @if (Model.RelatedProperties.Any())
+            {
+                <section class="detail-section">
+                    <h2 class="detail-section-title">Related Properties</h2>
+                    <div class="properties-grid">
+                        @foreach (var related in Model.RelatedProperties)
+                        {
+                            @Html.Partial("_PropertyCard", related)
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+    </main>
+
+    <aside>
+        <div class="agent-card">
+            <div class="agent-card-header">
+                <div class="agent-avatar"><i class="ti ti-user"></i></div>
+                <div class="agent-name">@(agent != null ? agent.FullName : "Karachi Estate Agent")</div>
+                <div class="agent-info">@(agent != null ? agent.Role : "Agent") at Karachi Estate Hub</div>
+                <div class="agent-stars">
+                    <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+                </div>
+            </div>
+            <div class="agent-card-body">
+                @if (!String.IsNullOrWhiteSpace(whatsAppPhone))
+                {
+                    <a class="btn-wa-full" href="https://wa.me/@whatsAppPhone" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> WhatsApp Agent</a>
+                }
+                @if (!String.IsNullOrWhiteSpace(phone))
+                {
+                    <a class="btn-call-full" href="tel:@phone"><i class="ti ti-phone"></i> Call Agent</a>
+                }
+                @if (!String.IsNullOrWhiteSpace(email))
+                {
+                    <a class="btn-email-full" href="mailto:@email"><i class="ti ti-mail"></i> Email Agent</a>
+                }
+            </div>
+        </div>
+
+        <div class="save-property-card">
+            @if (Model.IsSaved)
+            {
+                using (Html.BeginForm("Unsave", "Properties", new { id = property.PropertyId }, FormMethod.Post, new { @class = "save-property-form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit" class="save-property-btn saved">
+                        <i class="ti ti-heart-filled"></i>
+                        <span>Remove from Saved</span>
+                    </button>
+                }
+            }
+            else
+            {
+                using (Html.BeginForm("Save", "Properties", new { id = property.PropertyId }, FormMethod.Post, new { @class = "save-property-form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit" class="save-property-btn">
+                        <i class="ti ti-heart"></i>
+                        <span>Save Property</span>
+                    </button>
+                }
+            }
+        </div>
+
+        <div class="agent-card">
+            <div class="agent-card-body">
+                <h3 class="detail-section-title">Send Inquiry</h3>
+                @using (Html.BeginForm("SendInquiry", "Properties", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("PropertyId", property.PropertyId)
+                    <div class="filter-block">
+                        @Html.TextBox("Name", null, new { @class = "sort-select", style = "width:100%", placeholder = "Full name" })
+                    </div>
+                    <div class="filter-block">
+                        @Html.TextBox("Email", null, new { @class = "sort-select", style = "width:100%", type = "email", placeholder = "Email address" })
+                    </div>
+                    <div class="filter-block">
+                        @Html.TextBox("PhoneNumber", null, new { @class = "sort-select", style = "width:100%", type = "tel", placeholder = "Phone number" })
+                    </div>
+                    <div class="filter-block">
+                        @Html.TextArea("Message", null, new { @class = "sort-select", style = "width:100%;min-height:100px;resize:vertical", placeholder = "I am interested in this property." })
+                    </div>
+                    <button class="sidebar-apply" type="submit">Send Inquiry</button>
+                }
+            </div>
+        </div>
+    </aside>
+</div>

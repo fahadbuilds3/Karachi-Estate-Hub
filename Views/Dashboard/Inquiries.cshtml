@@ -1,0 +1,90 @@
+@model IEnumerable<KarachiEstateHub.Models.Inquiry>
+@{
+    ViewBag.Title = "Inquiries";
+    var myPropertiesUrl = Url.RouteUrl("MyProperties");
+    var createUrl = Url.RouteUrl("CreateListing");
+    var mySavedUrl = Url.RouteUrl("MySaved");
+}
+
+<div class="dashboard-layout">
+    <aside class="dash-sidebar">
+        <div class="dash-sidebar-logo">
+            <div class="dash-sidebar-logo-icon"><i class="ti ti-building-estate"></i></div>
+            <div class="dash-sidebar-logo-text">KEH</div>
+        </div>
+        <div class="dash-nav-section">Main</div>
+        <a class="dash-nav-item" href="@Url.Action("Index", "Dashboard")"><i class="ti ti-layout-dashboard"></i><span>Dashboard</span></a>
+        <a class="dash-nav-item" href="@myPropertiesUrl"><i class="ti ti-building"></i><span>My Properties</span></a>
+        <a class="dash-nav-item" href="@createUrl"><i class="ti ti-plus"></i><span>Add Property</span></a>
+        <a class="dash-nav-item active" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-message-circle"></i><span>Inquiries</span></a>
+        <a class="dash-nav-item" href="@mySavedUrl"><i class="ti ti-heart"></i><span>Saved</span></a>
+        <a class="dash-nav-item" href="@Url.Action("Logout", "Account")"><i class="ti ti-logout"></i><span>Logout</span></a>
+    </aside>
+
+    <main class="dash-main">
+        <div class="dash-header">
+            <div>
+                <div class="dash-header-title">Inquiries</div>
+                <div class="dash-header-sub">Review buyer and renter inquiries for your listings.</div>
+            </div>
+        </div>
+
+        <div class="dash-table-card">
+            <div class="dash-table-header">
+                <div class="dash-table-title">Recent Inquiries</div>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div style="padding:28px;text-align:center;color:var(--muted)">No inquiries yet.</div>
+            }
+            else
+            {
+                <table class="table-keh">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var inquiry in Model)
+                        {
+                            <tr>
+                                <td class="tbl-title">@(inquiry.Property != null ? inquiry.Property.Title : "-")</td>
+                                <td>@inquiry.FullName</td>
+                                <td>@inquiry.Email</td>
+                                <td>@inquiry.Phone</td>
+                                <td>@(inquiry.Message != null && inquiry.Message.Length > 55 ? inquiry.Message.Substring(0, 55) + "..." : inquiry.Message)</td>
+                                <td>@inquiry.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                <td><span class="status-pill @(inquiry.IsRead ? "status-active" : "status-pending")">@(inquiry.IsRead ? "Read" : "Unread")</span></td>
+                                <td class="table-actions">
+                                    <div class="admin-action-group">
+                                    @if (inquiry.Property != null)
+                                    {
+                                        <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = inquiry.PropertyId })"><i class="ti ti-eye"></i> View</a>
+                                    }
+                                    if (!inquiry.IsRead)
+                                    {
+                                        using (Html.BeginForm("MarkInquiryRead", "Dashboard", new { id = inquiry.InquiryId }, FormMethod.Post, new { style = "display:inline" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button class="admin-action-btn admin-action-approve" type="submit"><i class="ti ti-check"></i> Mark Read</button>
+                                        }
+                                    }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </main>
+</div>

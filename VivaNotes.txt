@@ -1,0 +1,62 @@
+Karachi Estate Hub Viva Notes
+=============================
+
+What is Karachi Estate Hub?
+---------------------------
+Karachi Estate Hub is a real estate web application for buying, selling, and renting properties in Karachi. Users can browse listings, view details, save properties, and send inquiries. Agents can submit properties, and admins can approve and manage listings.
+
+Why MVC architecture is used?
+-----------------------------
+MVC separates the application into Models, Views, and Controllers. This makes the project easier to understand, maintain, and test. The user interface stays in Views, business/database data stays in Models, and request handling stays in Controllers.
+
+What are Models?
+----------------
+Models are C# classes that represent database tables and business data. Examples are User, Property, PropertyImage, Inquiry, and SavedProperty.
+
+What are Views?
+---------------
+Views are Razor .cshtml files that generate the HTML shown to the user. Examples are the homepage, listings page, details page, login page, dashboard, and admin pages.
+
+What are Controllers?
+---------------------
+Controllers receive browser requests, load or save data using Entity Framework, choose the correct View, and pass data to that View.
+
+What is Entity Framework?
+-------------------------
+Entity Framework is an ORM. It allows the project to work with database records using C# classes instead of writing SQL for every operation.
+
+What is DbContext?
+------------------
+DbContext is the main Entity Framework class that connects the application to the database. KarachiEstateDbContext contains DbSet properties for Users, Properties, Images, Inquiries, SavedProperties, and other tables.
+
+What is SQL Server Express used for?
+------------------------------------
+SQL Server Express stores the project data, including users, properties, locations, amenities, uploaded image paths, saved properties, and inquiries.
+
+What are user roles?
+--------------------
+The project has Admin, Agent, and User roles. Admin manages the full system, Agent manages own property listings, and User can browse, save, and inquire about properties.
+
+How property approval works?
+----------------------------
+When an agent adds a property, it is usually saved as Pending. The admin reviews it and can approve it as Active or reject it. Only Active properties appear publicly.
+
+How image upload works?
+-----------------------
+Uploaded images are saved physically in /Uploads/Properties. The database stores only the relative URL, such as /Uploads/Properties/property-file.jpg. Views use Url.Content to display those images.
+
+How search/filter works?
+------------------------
+The listings page uses GET filters such as purpose, property type, location, bedrooms, price range, featured, verified, and sort option. The controller applies these filters to the Entity Framework query.
+
+How session login works?
+------------------------
+After successful login, the project stores UserId, UserName, and UserRole in Session. Controllers use these values to control access to dashboard, admin pages, saved properties, and add property features.
+
+How inquiries work?
+-------------------
+On the property detail page, a visitor or user can send an inquiry. The inquiry is saved in the database and linked to the selected property. Agents can view inquiries for their own properties.
+
+How saved properties work?
+--------------------------
+Logged-in users can save active properties. Saved records are stored in the SavedProperties table and displayed on the My Saved Properties page.
