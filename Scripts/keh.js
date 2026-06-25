@@ -2,7 +2,16 @@ function toggleMobileMenu() {
     var menu = document.getElementById('mobileMenu');
     if (menu) {
         menu.classList.toggle('open');
+        document.body.classList.toggle('mobile-menu-open', menu.classList.contains('open'));
     }
+}
+
+function closeMobileMenu() {
+    var menu = document.getElementById('mobileMenu');
+    if (menu) {
+        menu.classList.remove('open');
+    }
+    document.body.classList.remove('mobile-menu-open');
 }
 
 function switchTab(btn) {
@@ -79,3 +88,30 @@ function previewPropertyImages(input, targetId) {
         reader.readAsDataURL(file);
     });
 }
+
+document.addEventListener('click', function (event) {
+    var menu = document.getElementById('mobileMenu');
+    var nav = document.getElementById('mainNav');
+
+    if (!menu || !menu.classList.contains('open')) {
+        return;
+    }
+
+    if ((nav && nav.contains(event.target)) || menu.contains(event.target)) {
+        return;
+    }
+
+    closeMobileMenu();
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeMobileMenu();
+    }
+});
+
+window.addEventListener('resize', function () {
+    if (window.innerWidth > 1024) {
+        closeMobileMenu();
+    }
+});
