@@ -15,21 +15,21 @@
     var whatsAppPhone = !String.IsNullOrWhiteSpace(whatsAppSource) ? whatsAppSource.Replace("+", "").Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") : null;
     var activeImages = (Model.Images ?? Enumerable.Empty<KarachiEstateHub.Models.PropertyImage>())
         .Where(i => i != null && i.IsActive && !String.IsNullOrWhiteSpace(i.ImageUrl))
-        .ToList();
-    var mainImage = activeImages
         .OrderByDescending(i => i.IsPrimary)
         .ThenBy(i => i.SortOrder)
-        .FirstOrDefault();
+        .ToList();
+    var mainImage = activeImages.FirstOrDefault();
     var photoCount = activeImages.Any() ? activeImages.Count : property.PhotoCount;
+    var galleryCount = activeImages.Count;
 }
 
 <div class="detail-layout">
     <main>
-        <div class="gallery-main">
+        <div class="gallery-main" data-gallery-root>
             <div class="gallery-main-img">
                 @if (mainImage != null)
                 {
-                    <img src="@Url.Content(mainImage.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(mainImage.AltText) ? mainImage.AltText : property.Title)" class="property-image-cover" onerror="this.style.display='none';" />
+                    <img id="propertyGalleryMainImage" src="@Url.Content(mainImage.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(mainImage.AltText) ? mainImage.AltText : property.Title)" class="property-image-cover" data-gallery-main data-gallery-index="0" onerror="this.style.display='none';" />
                 }
                 else
                 {
@@ -46,18 +46,44 @@
                         <span class="pill badge-verified">Verified</span>
                     }
                 </div>
-                <div class="gallery-count-overlay"><i class="ti ti-photo"></i> @photoCount Photos</div>
+                @if (galleryCount > 1)
+                {
+                    <button class="gallery-nav-btn gallery-nav-prev" type="button" data-gallery-prev aria-label="Previous image">
+                        <svg class="gallery-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M15 6l-6 6l6 6" />
+                        </svg>
+                    </button>
+                    <button class="gallery-nav-btn gallery-nav-next" type="button" data-gallery-next aria-label="Next image">
+                        <svg class="gallery-nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M9 6l6 6l-6 6" />
+                        </svg>
+                    </button>
+                }
+                @if (galleryCount > 1)
+                {
+                    <div class="gallery-count-overlay">
+                        <span data-gallery-counter>1 / @galleryCount</span>
+                    </div>
+                }
+                else if (galleryCount == 0)
+                {
+                    <div class="gallery-count-overlay">
+                        <span>@photoCount Photos</span>
+                    </div>
+                }
             </div>
         </div>
 
         <div class="gallery-thumbs">
             @if (activeImages.Any())
             {
-                foreach (var image in activeImages.OrderByDescending(i => i.IsPrimary).ThenBy(i => i.SortOrder).Take(5))
+                var thumbIndex = 0;
+                foreach (var image in activeImages)
                 {
-                    <div class="gallery-thumb">
+                    <button class="gallery-thumb @(thumbIndex == 0 ? "active" : "")" type="button" data-gallery-thumb data-gallery-index="@thumbIndex" data-gallery-src="@Url.Content(image.ImageUrl)" data-gallery-alt="@(!String.IsNullOrWhiteSpace(image.AltText) ? image.AltText : property.Title)" aria-label="Show image @(thumbIndex + 1)">
                         <img src="@Url.Content(image.ImageUrl)" alt="@(!String.IsNullOrWhiteSpace(image.AltText) ? image.AltText : property.Title)" class="property-image-cover" onerror="this.style.display='none';" />
-                    </div>
+                    </button>
+                    thumbIndex++;
                 }
                 for (var i = activeImages.Count; i < 5; i++)
                 {

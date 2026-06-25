@@ -8,16 +8,16 @@
         <h2>Welcome Back</h2>
         <p>Sign in to manage your Karachi Estate Hub account and continue your property journey.</p>
         <div class="auth-features">
-            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-shield-check"></i></div><span>Secure account access</span></div>
-            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-building-estate"></i></div><span>Agent and buyer role support</span></div>
-            <div class="auth-feat"><div class="auth-feat-icon"><i class="ti ti-chart-bar"></i></div><span>Dashboard access for agents and admins</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><svg class="auth-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8.5-7 10c-4-1.5-7-5-7-10V6l7-3z" /><path d="M8.5 12l2.2 2.2l4.8-5" /></svg></div><span>Secure account access</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><svg class="auth-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18" /><path d="M5 21V7l7-4l7 4v14" /><path d="M9 21v-8h6v8" /></svg></div><span>Agent and buyer role support</span></div>
+            <div class="auth-feat"><div class="auth-feat-icon"><svg class="auth-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5" /><path d="M4 19h16" /><path d="M8 16v-5" /><path d="M12 16V8" /><path d="M16 16v-3" /></svg></div><span>Dashboard access for agents and admins</span></div>
         </div>
     </div>
 
     <div class="auth-panel-right">
         <div class="auth-form-card">
             <div class="auth-logo">
-                <div class="auth-logo-icon"><i class="ti ti-building-estate"></i></div>
+                <div class="auth-logo-icon"><svg class="auth-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18" /><path d="M5 21V7l7-4l7 4v14" /><path d="M9 21v-8h6v8" /></svg></div>
                 <div class="auth-form-title">Sign In</div>
                 <div class="auth-form-sub">Login to Karachi Estate Hub</div>
             </div>
@@ -35,17 +35,17 @@
                 <div class="role-grid">
                     <label class="role-option @(Model.Role == "User" ? "active" : "")" onclick="selectRole(this)">
                         @Html.RadioButtonFor(m => m.Role, "User", new { style = "display:none" })
-                        <i class="ti ti-user"></i>
+                        <svg class="role-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
                         <span>Buyer / Renter</span>
                     </label>
                     <label class="role-option @(Model.Role == "Agent" ? "active" : "")" onclick="selectRole(this)">
                         @Html.RadioButtonFor(m => m.Role, "Agent", new { style = "display:none" })
-                        <i class="ti ti-building-store"></i>
+                        <svg class="role-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5l8 5v12" /><path d="M9 21v-7h6v7" /><path d="M8 10h.01" /><path d="M16 10h.01" /></svg>
                         <span>Agent / Seller</span>
                     </label>
                     <label class="role-option @(Model.Role == "Admin" ? "active" : "")" onclick="selectRole(this)" style="grid-column:1/-1">
                         @Html.RadioButtonFor(m => m.Role, "Admin", new { style = "display:none" })
-                        <i class="ti ti-shield-lock"></i>
+                        <svg class="role-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8.5-7 10c-4-1.5-7-5-7-10V6l7-3z" /><path d="M9 12h6" /><path d="M10 12V9a2 2 0 0 1 4 0v3" /></svg>
                         <span>Admin</span>
                     </label>
                 </div>
