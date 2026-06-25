@@ -45,7 +45,8 @@
                 <div class="dash-table-title">My Property Listings</div>
                 <a class="btn-teal" href="@myPropertiesUrl">Manage All</a>
             </div>
-            <table class="table-keh">
+            <div class="admin-table-wrap">
+            <table class="table-keh admin-table">
                 <thead>
                     <tr><th>Title</th><th>Type</th><th>Purpose</th><th>Price</th><th>Status</th><th>Views</th><th>Actions</th></tr>
                 </thead>
@@ -54,13 +55,13 @@
                     {
                         var statusClass = property.Status == "Active" ? "status-active" : property.Status == "Pending" ? "status-pending" : "status-draft";
                         <tr>
-                            <td class="tbl-title">@property.Title</td>
-                            <td class="tbl-type">@(property.PropertyType != null ? property.PropertyType.Name : "-")</td>
-                            <td>@property.Purpose</td>
-                            <td class="tbl-price">@(!String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price))</td>
-                            <td><span class="status-pill @statusClass">@property.Status</span></td>
-                            <td>@property.ViewsCount</td>
-                            <td class="table-actions">
+                            <td class="tbl-title" data-label="Title">@property.Title</td>
+                            <td class="tbl-type" data-label="Type">@(property.PropertyType != null ? property.PropertyType.Name : "-")</td>
+                            <td data-label="Purpose">@property.Purpose</td>
+                            <td class="tbl-price" data-label="Price">@(!String.IsNullOrWhiteSpace(property.PriceLabel) ? property.PriceLabel : String.Format("PKR {0:N0}", property.Price))</td>
+                            <td data-label="Status"><span class="status-pill @statusClass">@property.Status</span></td>
+                            <td data-label="Views">@property.ViewsCount</td>
+                            <td class="table-actions" data-label="Actions">
                                 <div class="admin-action-group">
                                     <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = property.PropertyId })"><i class="ti ti-eye"></i> View</a>
                                     <a class="admin-action-btn admin-action-edit" href="@Url.RouteUrl("EditListing", new { id = property.PropertyId })"><i class="ti ti-edit"></i> Edit</a>
@@ -75,6 +76,7 @@
                     }
                 </tbody>
             </table>
+            </div>
         </div>
 
         <div class="dash-table-card">
@@ -82,7 +84,8 @@
                 <div class="dash-table-title">Recent Inquiries</div>
                 <a class="btn-teal" href="@Url.Action("Inquiries", "Dashboard")">View All</a>
             </div>
-            <table class="table-keh">
+            <div class="admin-table-wrap">
+            <table class="table-keh admin-table">
                 <thead>
                     <tr><th>Property</th><th>Name</th><th>Email</th><th>Message</th><th>Status</th><th>Action</th></tr>
                 </thead>
@@ -90,12 +93,12 @@
                     @foreach (var inquiry in Model.RecentInquiries)
                     {
                         <tr>
-                            <td class="tbl-title">@(inquiry.Property != null ? inquiry.Property.Title : "-")</td>
-                            <td>@inquiry.FullName</td>
-                            <td>@inquiry.Email</td>
-                            <td>@(inquiry.Message != null && inquiry.Message.Length > 45 ? inquiry.Message.Substring(0, 45) + "..." : inquiry.Message)</td>
-                            <td><span class="status-pill @(inquiry.IsRead ? "status-active" : "status-pending")">@(inquiry.IsRead ? "Read" : "Unread")</span></td>
-                            <td><a class="admin-action-btn admin-action-view" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-eye"></i> View</a></td>
+                            <td class="tbl-title" data-label="Property">@(inquiry.Property != null ? inquiry.Property.Title : "-")</td>
+                            <td data-label="Name">@inquiry.FullName</td>
+                            <td data-label="Email">@inquiry.Email</td>
+                            <td data-label="Message">@(inquiry.Message != null && inquiry.Message.Length > 45 ? inquiry.Message.Substring(0, 45) + "..." : inquiry.Message)</td>
+                            <td data-label="Status"><span class="status-pill @(inquiry.IsRead ? "status-active" : "status-pending")">@(inquiry.IsRead ? "Read" : "Unread")</span></td>
+                            <td class="table-actions" data-label="Action"><a class="admin-action-btn admin-action-view" href="@Url.Action("Inquiries", "Dashboard")"><i class="ti ti-eye"></i> View</a></td>
                         </tr>
                     }
                     @if (!Model.RecentInquiries.Any())
@@ -104,6 +107,7 @@
                     }
                 </tbody>
             </table>
+            </div>
         </div>
     </main>
 </div>

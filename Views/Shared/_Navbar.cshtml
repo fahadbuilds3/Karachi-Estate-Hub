@@ -30,7 +30,7 @@
         <li><a href="@Url.Action("About", "Home")">Agents</a></li>
         <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
     </ul>
-    <div class="navbar-actions">
+    <div class="navbar-actions nav-actions nav-user-actions">
         @if (!isLoggedIn)
         {
             <a class="btn-outline" href="@Url.Action("Login", "Account")">Login</a>
@@ -38,25 +38,25 @@
         }
         else
         {
-            <span class="btn-outline">Hi, @userName</span>
+            <span class="btn-outline nav-user-pill">Hi, @userName</span>
             if (userRole == "Admin")
             {
-                <a class="btn-outline" href="@Url.Action("Index", "Admin")">Admin Panel</a>
-                <a class="btn-outline" href="@Url.Action("Properties", "Admin")">Properties</a>
-                <a class="btn-outline" href="@Url.Action("Users", "Admin")">Users</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@Url.Action("Index", "Admin")">Admin Panel</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@Url.Action("Properties", "Admin")">Properties</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@Url.Action("Users", "Admin")">Users</a>
             }
             else if (canUseDashboard)
             {
-                <a class="btn-outline" href="@Url.Action("Index", "Dashboard")">Dashboard</a>
-                <a class="btn-outline" href="@myPropertiesUrl">My Properties</a>
-                <a class="btn-outline" href="@Url.Action("Inquiries", "Dashboard")">Inquiries</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@myPropertiesUrl">My Properties</a>
+                <a class="btn-outline nav-btn navbar-panel-link" href="@Url.Action("Inquiries", "Dashboard")">Inquiries</a>
                 <a class="btn-teal" href="@addPropertyUrl"><i class="ti ti-plus" style="font-size:13px"></i> Add Property</a>
             }
             else
             {
                 <a class="btn-outline" href="@mySavedUrl">Saved Properties</a>
             }
-            <a class="btn-outline" href="@Url.Action("Logout", "Account")">Logout</a>
+            <a class="btn-outline nav-btn navbar-logout-link" href="@Url.Action("Logout", "Account")">Logout</a>
         }
         <button class="navbar-hamburger" type="button" onclick="toggleMobileMenu()" aria-label="Open menu">
             <svg class="navbar-menu-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

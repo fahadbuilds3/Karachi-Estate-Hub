@@ -17,8 +17,8 @@
     <main class="dash-main">
         <div class="dash-header"><div><div class="dash-header-title">Manage Properties</div><div class="dash-header-sub">@Model.ResultCount properties found.</div></div></div>
 
-        <form method="get" class="dash-table-card" style="padding:14px;margin-bottom:18px">
-            <div class="prop-form-grid">
+        <form method="get" class="dash-table-card admin-filter-card filter-card" style="padding:14px;margin-bottom:18px">
+            <div class="prop-form-grid admin-filter-form admin-filter-grid">
                 <select class="prop-form-select" name="status">
                     <option value="">All Status</option>
                     @foreach (var s in new[] { "Pending", "Active", "Draft", "Rejected" }) { <option value="@s" @(Model.SelectedStatus == s ? "selected" : "")>@s</option> }
@@ -33,18 +33,27 @@
             </div>
         </form>
 
-        <div class="dash-table-card">
+        <div class="dash-table-card admin-card">
             <div class="dash-table-header"><div class="dash-table-title">Properties</div></div>
-            <table class="table-keh">
+            <div class="admin-table-wrap">
+            <table class="table-keh admin-table">
                 <thead><tr><th>Title</th><th>Agent/User</th><th>Type</th><th>Purpose</th><th>Location</th><th>Price</th><th>Status</th><th>Featured</th><th>Verified</th><th>Created</th><th>Actions</th></tr></thead>
                 <tbody>
                     @foreach (var p in Model.Properties)
                     {
                         var statusClass = p.Status == "Active" ? "status-active" : p.Status == "Pending" ? "status-pending" : "status-draft";
                         <tr>
-                            <td class="tbl-title">@p.Title</td><td>@(p.User != null ? p.User.FullName : "-")</td><td>@(p.PropertyType != null ? p.PropertyType.Name : "-")</td><td>@p.Purpose</td><td>@(p.Location != null ? p.Location.Name : "-")</td><td class="tbl-price">@p.PriceLabel</td>
-                            <td><span class="status-pill @statusClass">@p.Status</span></td><td>@(p.IsFeatured ? "Yes" : "No")</td><td>@(p.IsVerified ? "Yes" : "No")</td><td>@p.CreatedAt.ToString("MMM dd, yyyy")</td>
-                            <td class="table-actions">
+                            <td class="tbl-title" data-label="Title">@p.Title</td>
+                            <td data-label="Agent/User">@(p.User != null ? p.User.FullName : "-")</td>
+                            <td data-label="Type">@(p.PropertyType != null ? p.PropertyType.Name : "-")</td>
+                            <td data-label="Purpose">@p.Purpose</td>
+                            <td data-label="Location">@(p.Location != null ? p.Location.Name : "-")</td>
+                            <td class="tbl-price" data-label="Price">@p.PriceLabel</td>
+                            <td data-label="Status"><span class="status-pill @statusClass">@p.Status</span></td>
+                            <td data-label="Featured">@(p.IsFeatured ? "Yes" : "No")</td>
+                            <td data-label="Verified">@(p.IsVerified ? "Yes" : "No")</td>
+                            <td data-label="Created">@p.CreatedAt.ToString("MMM dd, yyyy")</td>
+                            <td class="table-actions" data-label="Actions">
                                 <div class="admin-action-group">
                                 <a class="admin-action-btn admin-action-view" href="@Url.RouteUrl("ListingDetails", new { id = p.PropertyId })"><i class="ti ti-eye"></i> View</a>
                                 <a class="admin-action-btn admin-action-edit" href="@Url.RouteUrl("EditListing", new { id = p.PropertyId })"><i class="ti ti-edit"></i> Edit</a>
@@ -66,6 +75,7 @@
                     @if (!Model.Properties.Any()) { <tr><td colspan="11" style="text-align:center;color:var(--muted)">No properties found.</td></tr> }
                 </tbody>
             </table>
+            </div>
         </div>
     </main>
 </div>
